@@ -1,5 +1,11 @@
 # db2ppom
 DB2 for z/OS Online Monitor (COBOL, BAL, IFI, TSO/ISPF)
+http://davidjyoung.com/cmg/allofit.pdf PPOM Source - page 181
+  SAP/DB2 Performance Issue - page 60
+http://www.davidjyoung.com/cmg/db2ifi.hds.pdf
+  Using DB2's Instrumentation Facility Interface: A Poor Person's Online Monitor
+
+Installation: Copy the source from GITHUB to a PDS
 AFTER ADJUSTING THE JCL FOR YOUR INSTALLATION, RUN THE FOLLOWING JOBS:
 1) ASSTICON - ASSEMBLE TIME CONSTANTS FOR DATE CONVERT ROUTINES
 2) PREAPP - PRECOMPILE, ASSEMBLE AND LINK APPLICATION STATS MODULE
