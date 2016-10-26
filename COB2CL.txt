@@ -1,0 +1,29 @@
+//COB2COMP JOB (330DJY00),'D J YOUNG ',MSGCLASS=Y,NOTIFY=DJY00          
+//COB2UCL PROC                                                          
+//*   PROC FOR COBOL II - COMPILE AND LINK                              
+//COB2 EXEC PGM=IGYCRCTL,PARM='OBJECT,LIB,APOST,LIST',REGION=1024K      
+//STEPLIB  DD DSNAME=SYS1.COB2COMP,DISP=SHR                             
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSLIN   DD  DSNAME=&&LOADSET,UNIT=3390,DISP=(MOD,PASS),              
+//             SPACE=(TRK,(3,3))                                        
+//SYSUT1   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSUT2   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSUT3   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSUT4   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSUT5   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSUT6   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSUT7   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//LKED   EXEC  PGM=IEWL,PARM='LIST,XREF,LET,NCAL',COND=(5,LT,COB2),     
+//             REGION=512K                                              
+//SYSLIN   DD  DSNAME=&&LOADSET,DISP=(OLD,DELETE)                       
+//SYSLMOD  DD  DSNAME=DSN510.SRCLIB.DATA(DB2MON),                       
+//             DISP=SHR                                                 
+//SYSLIB  DD DSNAME=SYS1.COB2COMP,DISP=SHR                              
+//        DD DSNAME=SYS1.COB2LIB,DISP=SHR                               
+//SYSUT1   DD  UNIT=3390,SPACE=(CYL,(1,1))                              
+//SYSPRINT DD  SYSOUT=*                                                 
+// PEND                                                                 
+//DOIT EXEC COB2UCL                                                     
+//COB2.SYSIN DD DSN=DJY00.PPOM51.STUFF(DB2MONC),DISP=SHR                
+//LKED.SYSLMOD  DD  DSNAME=DSN51L.SRCLIB.DATA(DB2MON),                  
+//             DISP=SHR                                                 

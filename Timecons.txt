@@ -1,0 +1,73 @@
+R0       EQU   0
+R1       EQU   1
+R2       EQU   2
+R3       EQU   3
+R4       EQU   4
+R5       EQU   5
+R6       EQU   6
+R7       EQU   7
+R8       EQU   8
+R9       EQU   9
+R10      EQU   10
+R11      EQU   11
+R12      EQU   12
+R13      EQU   13
+R14      EQU   14
+R15      EQU   15
+*
+$PARM1   DSECT
+         DC    CL8'TIMEOFDA'
+PARMS    DS    XL56                CONSTANTS
+**********************************************************************
+*
+*     PROGRAM NAME - TIMECONS
+*
+*     FUNCTION     - MOVE HEX CONSTANTS BACK TO DB2MON FOR
+*                    CONVERTING STCK INTO USABLE TIME AND DATE
+*
+*     INPUT        - UPON ENTRY R1 POINTS AT THE FOLLOWING PARMS
+*                    P1 - $PARM1   DSECT
+*                         EYEBALL  DC    CL8'TIMEOFDA'
+*                         PARMS    DS    XL56
+*
+*     REGISTERS    - R1 --> CALLER PARMLIST
+*                    R3 --> WORKAREA SUPPLIED BY CALLER
+*
+*     OUTPUT       - WORKAREA WILL BE FILLED IN WITH TIMER CONSTANTS
+*
+*     MACROS       - NONE
+*
+*     NOTES        - THE TIME CONSTANTS USED IN THIS ROUTINE ARE TAKEN
+*                    FROM THE ESA P.O.O., PAGE 4-29.  THEY HAVE BEEN
+*                    DIVIDED BY 16, TO AVOID 0C9-S IN THE COBOL MAIN
+*                    ROUTINE.  THE 0C9-S OCURRED BECAUSE THE SIGNED
+*                    INTEGERS WERE TOO BIG TO FIT IN A DOUBLEWORD.
+*                    THE CORRESPONDING TIMESTAMPS IN DBSTATS AND
+*                    SYSSTATS HAVE ALSO BEEN DIVIDED BY 16
+*
+**********************************************************************
+TIMECONS  CSECT
+          STM   R14,R12,12(R13)
+          BAL   R14,80(R15)
+          DC    18F'-1'
+          ST    R13,4(R14)
+          ST    R14,8(R13)
+          LR    R13,R14
+          USING TIMECONS+8,R13
+*(1)
+          L     R3,0(R1)             GET ADDRESS OF WORKAREA
+          USING $PARM1,R3            SET UP ADDRESSABILITY
+          MVC   PARMS(56),CONSTANT   MOVE CONSTANTS
+EXIT      L     R13,4(R13)           RESTORE SAVEAREA POINTER
+          LM    R14,R12,12(R13)      RESTORE RETURN ADDRESS
+          BR    R14
+          LTORG
+          DC    CL80'COPYRIGHT 2001 DAVID J YOUNG'
+CONSTANT  DC    XL8'000000000F424000'
+          DC    XL8'0000000393870000'
+          DC    XL8'0000141DD7600000'
+          DC    XL8'001CAE8C13E00000'
+          DC    XL8'001CC2A9EB400000'
+          DC    XL8'0072CE4E26E00000'
+          DC    XL8'09DDA6997FE00000'
+          END

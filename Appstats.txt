@@ -1,0 +1,745 @@
+R0       EQU   0
+R1       EQU   1
+R2       EQU   2
+R3       EQU   3
+R4       EQU   4
+R5       EQU   5
+R6       EQU   6
+R7       EQU   7
+R8       EQU   8
+R9       EQU   9
+R10      EQU   10
+R11      EQU   11
+R12      EQU   12
+R13      EQU   13
+R14      EQU   14
+R15      EQU   15
+*
+         DSNDQWIW  DSECT=YES,SUBTYPE=ALL
+*
+*
+         DSNDQWAS  DSECT=YES,SUBTYPE=ALL
+*
+*
+         DSNDIFCA  DSECT=YES
+*
+*
+         DSNDQWST  DSECT=YES,SUBTYPE=ALL
+*
+*
+         DSNDWQAL
+*
+$PARM1   DSECT
+         DC    CL8'THREADS '
+CORRID   DS    CL12               CORRELATION ID OF REQUESTED THREAD
+TOKEN    DS    F                  TOKEN OF REQUESTED THREAD UPD 4/22
+TIMESTMP DS    XL8                TIMESTAMP / 16
+*                                 QWAC ACCOUNTING DATA LIKE IFCID003
+QWAC#1   DS    XL8                ELAPSED TIME IN DB2
+QWAC#2   DS    XL8                TCB TIME IN DB2
+QWAC#3   DS    XL8                SRB TIME IN DB2
+QWAC#4   DS    XL8                I/O WAIT ELAPSED TIME
+QWAC#5   DS    XL8                LOCK AND LATCH ELAPSED WAIT
+QWAC#6   DS    F                  # DB2 ENTRY/EXIT EVENTS
+QWAC#7   DS    F                  # WAIT TRACE EVENTS
+QWAC#8   DS    XL8                READ WAIT TIMEOTHER THREADTIME
+QWAC#9   DS    XL8                WRITE WAIT TIME OTHER THREAD TIME
+QWAC#10  DS    XL8                SWITCH WAIT TIME
+QWAC#11  DS    XL8                ARCHIVE LOG WAIT TIME
+QWAC#12  DS    F                  # LOCK WAITS
+QWAC#13  DS    F                  # READ WAITS
+QWAC#14  DS    F                  # WRITE WAITS
+QWAC#15  DS    F                  # SWITCH WAITS
+QWAC#151 DS    F                  # DRAIN WAITS
+QWAC#152 DS    XL8                ACC WAIT DRAIN
+QWAC#153 DS    XL8                ACC WAIT DRAIN RELEASE
+QWAC#154 DS    F                  # CLAIM REQUESTS
+QWAC#155 DS    XL8                ACC WAIT TAPE ARCHIVES
+QWAC#156 DS    F                  # ARCH READ WAITS
+QWAC#157 DS    XL8                ACC WAIT PAGE LATCH
+QWAC#158 DS    F                  # PAGE LATCH WAITS
+QWAC#159 DS    H                  FLAGS
+QWAC#15A DS    H                  # PACKAGES TRACES
+QWAC#16  DS    XL8                CLASS 1 BEGINING STCK ELAPSED
+QWAC#17  DS    XL8                CLASS 1 ENDING STCK ELAPSED
+QWAC#18  DS    XL8                CLASS 1 BEGINING TCB
+QWAC#19  DS    XL8                CLASS 1 ENDING TCB
+QWAC#20  DS    XL8                CLASS 1 BEGINING SRB
+QWAC#21  DS    XL8                CLASS 1 ENDING SRB
+QWAC#22  DS    XL4                REASON ACCT INVOKED
+QWAC#23  DS    XL16               NET ID FROM CCB
+QWAC#24  DS    F                  # COMMIT PHASE 2
+QWAC#25  DS    F                  # ABORT
+*  CLASS 3 AND DATA SHARING
+QWAC#26  DS    XL8     ACC. WAIT MSG SEND
+QWAC#27  DS    XL8     ACC. WAIT GLOBAL LOCK CONTENTION
+QWAC#28  DS    F       #MSG. SEND WAITS
+QWAC#29  DS    F       #GLOBAL LOCK CONTENTION WAITS
+*  STORED PROCEDURES
+QWAC#30  DS    XL8     TCB TIME SPA SQL CALLS
+QWAC#31  DS    XL8     TCB TIME DB2 SQL CALLS
+QWAC#32  DS    F       #ENTRY/EXIT SPA
+QWAC#33  DS    XL8     ELAPSED WAIT FOR TCB
+QWAC#34  DS    F       #WAITS FOR TCB
+*  QUERY CPU PARALLELISM EXECUTION
+QWAC#35  DS    F       #CREATED PARALLEL TASKS
+QWAC#36  DS    A       A(ACE) OF ORIGINATING TASK
+*                                 QXST SQL COUNTERS
+QXST#1   DS    F                  SELECTS
+QXST#2   DS    F                  INSERTS
+QXST#3   DS    F                  UPDATES
+QXST#4   DS    F                  DELETES
+QXST#5   DS    F                  DESCRIBES
+QXST#6   DS    F                  PREPARES
+QXST#7   DS    F                  OPENS
+QXST#8   DS    F                  CLOSES
+QXST#9   DS    F                  CREATE TABLE
+QXST#10  DS    F                  CREATE INDEX
+QXST#11  DS    F                  CREATE TABLESPACE
+QXST#12  DS    F                  CREATE SYNONYM
+QXST#13  DS    F                  CREATE DATABASE
+QXST#14  DS    F                  CREATE STOGROUP
+QXST#15  DS    F                  CREATE VIEW
+QXST#16  DS    F                  DROP INDEX
+QXST#17  DS    F                  DROP TABLE
+QXST#18  DS    F                  DROP TABLESPACE
+QXST#19  DS    F                  DROP DATABASE
+QXST#20  DS    F                  DROP SYNONYM
+QXST#21  DS    F                  DROP STOGROUP
+QXST#22  DS    F                  DROP VIEW
+QXST#23  DS    F                  ALTER STOGROUP
+QXST#24  DS    F                  FETCHES
+QXST#25  DS    F                  ALTER TABLESPACE
+QXST#26  DS    F                  ALTER TABLE
+QXST#27  DS    F                  ALTER INDEX
+QXST#28  DS    F                  COMMENT ON
+QXST#29  DS    F                  LOCK TABLE
+QXST#30  DS    F                  GRANT
+QXST#31  DS    F                  REVOKES
+QXST#32  DS    F                  INCREMENTAL BINDS
+QXST#33  DS    F                  LABEL ON
+QXST#34  DS    F                  SET CURRENT SQLID
+QXST#35  DS    F                  CREATE ALIAS
+QXST#36  DS    F                  DROP ALIAS
+QXST#37  DS    F                  RID PROC USED
+QXST#38  DS    F                  RID NG STORAGE
+QXST#39  DS    F                  RID NG LIMIT
+QXST#40  DS    F                  SET HOST VARIABLE
+QXST#41  DS    F                  ALTER DB
+QXST#42  DS    F                  DROP PACKAGE
+QXST#43  DS    F                  DESCRIBE TABLE
+QXST#44  DS    F                  MAX DEGREE PARALELLISM
+QXST#45  DS    F                  # PARALLEL GROUPS
+QXST#46  DS    F                  P-SEQ UPD/DELETE
+QXST#47  DS    F                  P-SEQ NOSORT
+QXST#48  DS    F                  P-SEQ SOS
+QXST#49  DS    F                  P-LP   SOS
+QXST#50  DS    F                  P OK
+QXST#51  DS    F                  CONNECT TYPE 1
+QXST#52  DS    F                  CONNECT TYPE 2
+QXST#53  DS    F                  RELEASE
+QXST#54  DS    F                  SET CONNECTION
+QXST#55  DS    F                  SET CURRENT DEGREE
+QXST#56  DS    F                  SET CURRENT RULES
+QXST#57  DS    F                  #SQL CALL STATEMENTS
+QXST#58  DS    F                  #SPA ABENDS
+QXST#59  DS    F                  #SQL CALL TIMEOUTS
+QXST#60  DS    F                  #SQL CALL REJECTS
+QXST#61  DS    F                  #PAR. GROUP TO SEQ. DUE TO UNAVAILABL
+*                                 ENCLAVE
+*                                 QBAC BUFFER POOL ACCOUNTING
+QBAC1#1  DS    F                  BUFFER POOL ID
+QBAC1#2  DS    F                  GET PAGES
+QBAC1#3  DS    F                  SETW ISSUED SYSTEM PAGES
+QBAC1#4  DS    F                  RESERVED
+QBAC1#5  DS    F                  SYNC READS
+QBAC1#6  DS    F                  SP REQUESTED
+QBAC1#7  DS    F                  SYNC WRITES
+QBAC1#8  DS    F                  LIST PREFETCH REQUESTED
+QBAC1#9  DS    F                  DYNAMIC PREFETCH REQUESTED
+QBAC1#10 DS    F                  SUCC HPOOL READS
+QBAC1#11 DS    F                  UNSUCC HPOOL READS
+QBAC1#12 DS    F                  SUCC HPOOL WRITE
+QBAC1#13 DS    F                  UNSUCC HPOOL WRITE
+QBAC1#14 DS    F                  GET PAGE NO GOOD SOMETHING
+QBAC1#15 DS    F                  PAGES PREFETCHED BY AGENT
+QBAC1#16 DS    F                  HP-VP PAGES
+QBAC2#1  DS    F                  BUFFER POOL ID
+QBAC2#2  DS    F                  GET PAGES
+QBAC2#3  DS    F                  SETW ISSUED SYSTEM PAGES
+QBAC2#4  DS    F                  RESERVED
+QBAC2#5  DS    F                  SYNC READS
+QBAC2#6  DS    F                  SP REQUESTED
+QBAC2#7  DS    F                  SYNC WRITES
+QBAC2#8  DS    F                  LIST PREFETCH REQUESTED
+QBAC2#9  DS    F                  DYNAMIC PREFETCH REQUESTED
+QBAC2#10 DS    F                  SUCC HPOOL READS
+QBAC2#11 DS    F                  UNSUCC HPOOL READS
+QBAC2#12 DS    F                  SUCC HPOOL WRITE
+QBAC2#13 DS    F                  UNSUCC HPOOL WRITE
+QBAC2#14 DS    F                  GET PAGE NO GOOD SOMETHING
+QBAC2#15 DS    F                  PAGES PREFETCHED BY AGENT
+QBAC2#16 DS    F                  HP-VP PAGES
+QBAC3#1  DS    F                  BUFFER POOL ID
+QBAC3#2  DS    F                  GET PAGES
+QBAC3#3  DS    F                  SETW ISSUED SYSTEM PAGES
+QBAC3#4  DS    F                  RESERVED
+QBAC3#5  DS    F                  SYNC READS
+QBAC3#6  DS    F                  SP REQUESTED
+QBAC3#7  DS    F                  SYNC WRITES
+QBAC3#8  DS    F                  LIST PREFETCH REQUESTED
+QBAC3#9  DS    F                  DYNAMIC PREFETCH REQUESTED
+QBAC3#10 DS    F                  SUCC HPOOL READS
+QBAC3#11 DS    F                  UNSUCC HPOOL READS
+QBAC3#12 DS    F                  SUCC HPOOL WRITE
+QBAC3#13 DS    F                  UNSUCC HPOOL WRITE
+QBAC3#14 DS    F                  GET PAGE NO GOOD SOMETHING
+QBAC3#15 DS    F                  PAGES PREFETCHED BY AGENT
+QBAC3#16 DS    F                  HP-VP PAGES
+QBAC4#1  DS    F                  BUFFER POOL ID
+QBAC4#2  DS    F                  GET PAGES
+QBAC4#3  DS    F                  SETW ISSUED SYSTEM PAGES
+QBAC4#4  DS    F                  RESERVED
+QBAC4#5  DS    F                  SYNC READS
+QBAC4#6  DS    F                  SP REQUESTED
+QBAC4#7  DS    F                  SYNC WRITES
+QBAC4#8  DS    F                  LIST PREFETCH REQUESTED
+QBAC4#9  DS    F                  DYNAMIC PREFETCH REQUESTED
+QBAC4#10 DS    F                  SUCC HPOOL READS
+QBAC4#11 DS    F                  UNSUCC HPOOL READS
+QBAC4#12 DS    F                  SUCC HPOOL WRITE
+QBAC4#13 DS    F                  UNSUCC HPOOL WRITE
+QBAC4#14 DS    F                  GET PAGE NO GOOD SOMETHING
+QBAC4#15 DS    F                  PAGES PREFETCHED BY AGENT
+QBAC4#16 DS    F                  HP-VP PAGES
+*                                 QTXA DATA - IRLM LOCKING
+QTXA#1   DS    F                  DEADLOCKS
+QTXA#2   DS    F                  SUSPEND COUNT - LOCK CONFLICT
+QTXA#3   DS    F                  TIMEOUT COUNTS
+QTXA#4   DS    F                  LOCK ESACL SHARED
+QTXA#5   DS    F                  LOCK ESCAL EXCLUSIVE
+QTXA#6   DS    F                  MAX PAGE LOCKS
+QTXA#7   DS    XL2                FLAG BYTE
+QTXA#9   DS    CL2                RLIM TABLE ID
+QTXA#10  DS    F                  HOW LIMIT WAS DETERMINED
+QTXA#11  DS    F                  LIMIT IN SU'S - ASUTIME
+QTXA#12  DS    F                  LIMIT IN CPU 16 MICROSECONDS
+QTXA#13  DS    F                  HIGHEST CPU 16 MICROSECONDS
+QTXA#14  DS    F                  SUSPEND COUNT - LATCH CONFLICT
+QTXA#15  DS    F                  SUSPEND COUNT - OTHER CONFLICT
+QTXA#16  DS    F                  LOCK REQUESTS
+QTXA#17  DS    F                  UNLOCK REQUESTS
+QTXA#18  DS    F                  QUERY REQUESTS
+QTXA#19  DS    F                  CHANGE REQUESTS
+QTXA#20  DS    F                  OTHER IRLM REQUESTS
+QTXA#21  DS    F                  CLAIM REQUESTS
+QTXA#22  DS    F                  NO GOOD CLAIM REQUESTS
+QTXA#23  DS    F                  DRAIN REQUESTS
+QTXA#24  DS    F                  NO GOOD DRAIN REQUESTS
+*                                 Q148 MORE APPLICATION STUFF
+Q148#1   DS    CL8                CONNECTION TYPE
+Q148#2   DS    F                  ACE TOKEN
+Q148#3   DS    H                  APPLICATION REQUEST COUNT
+Q148#4   DS    H                  ASID
+Q148#5   DS    C                  =A IN APPLICATION, =D IN DB2
+Q148#6   DS    XL2                STATUS
+*                                 X'80' =1 PLAN LEVEL
+*                                       =0 SIGNON, IDENTIFY LEVEL
+*                                 X'40' EOT TERMINATION
+*                                 X'20' CREATE THREAD QUEUED
+*                                 X'10' =1 TSO FOREGROUND
+*                                       =0 BACKGROUND
+*                                 X'08' AGENT QUEUED EOT TERM
+Q148#7   DS    1C                 RESERVED
+Q148#8   DS    F                  ASCB TOKEN
+Q148#9   DS    F                  TCB TOKEN
+Q148#10  DS    H                  LATEST IFCID PROCESSED
+Q148#11  DS    H                  PREVIOUS IFCID PROCESSED
+Q148#12  DS    XL8                LOCK HASH
+Q148#13  DS    XL24               LOCK NAME
+Q148#14  DS    F                  THREAD TOKEN
+Q148#15  DS    XL20               STORED PROCEDURE NAME
+*
+*   Q1488 - DISTRIBUTED AGENT INFORMATION
+*
+Q14881#1 DS    CL16       REMOTE LOCATION NAME
+Q14881#2 DS    F          VTAM APPC ID
+Q14881#3 DS    XL8        SESSION ID
+Q14881#4 DS    XL2        CONVERSATION ACTIVE FLAG
+Q14881#5 DS    XL4        CONVERSATION STATUS INDICATOR
+Q14881#6 DS    XL2        CONVERSATION TYPE
+Q14881#7 DS    CL8        TIMESTAMP LAST MESSAGE
+*
+Q14882#1 DS    CL16       REMOTE LOCATION NAME
+Q14882#2 DS    F          VTAM APPC ID
+Q14882#3 DS    XL8        SESSION ID
+Q14882#4 DS    XL2        CONVERSATION ACTIVE FLAG
+Q14882#5 DS    XL4        CONVERSATION STATUS INDICATOR
+Q14882#6 DS    XL2        CONVERSATION TYPE
+Q14882#7 DS    CL8        TIMESTAMP LAST MESSAGE
+*
+Q14883#1 DS    CL16       REMOTE LOCATION NAME
+Q14883#2 DS    F          VTAM APPC ID
+Q14883#3 DS    XL8        SESSION ID
+Q14883#4 DS    XL2        CONVERSATION ACTIVE FLAG
+Q14883#5 DS    XL4        CONVERSATION STATUS INDICATOR
+Q14883#6 DS    XL2        CONVERSATION TYPE
+Q14883#7 DS    CL8        TIMESTAMP LAST MESSAGE
+*
+Q14884#1 DS    CL16       REMOTE LOCATION NAME
+Q14884#2 DS    F          VTAM APPC ID
+Q14884#3 DS    XL8        SESSION ID
+Q14884#4 DS    XL2        CONVERSATION ACTIVE FLAG
+Q14884#5 DS    XL4        CONVERSATION STATUS INDICATOR
+Q14884#6 DS    XL2        CONVERSATION TYPE
+Q14884#7 DS    CL8        TIMESTAMP LAST MESSAGE
+*
+*   Q1489 - DISTRIBUTED ACCOUNTING INFORMATION
+*
+Q14891#1 DS    CL16       REMOTE LOCATION NAME
+Q14891#2 DS    F          #MESSAGES SENT
+Q14891#3 DS    F          #MESSAGES RECEIVED
+Q14891#4 DS    XL8        TOTAL ELAPSED FLOAT
+Q14891#5 DS    XL8        DBAA ELAPSED FLOAT
+Q14891#6 DS    XL8        DBAA CPU FLOAT
+Q14891#7 DS    XL8        REMOTE PRODUCT ID
+*
+Q14892#1 DS    CL16       REMOTE LOCATION NAME
+Q14892#2 DS    F          #MESSAGES SENT
+Q14892#3 DS    F          #MESSAGES RECEIVED
+Q14892#4 DS    XL8        TOTAL ELAPSED FLOAT
+Q14892#5 DS    XL8        DBAA ELAPSED FLOAT
+Q14892#6 DS    XL8        DBAA CPU FLOAT
+Q14892#7 DS    XL8        REMOTE PRODUCT ID
+*
+Q14893#1 DS    CL16       REMOTE LOCATION NAME
+Q14893#2 DS    F          #MESSAGES SENT
+Q14893#3 DS    F          #MESSAGES RECEIVED
+Q14893#4 DS    XL8        TOTAL ELAPSED FLOAT
+Q14893#5 DS    XL8        DBAA ELAPSED FLOAT
+Q14893#6 DS    XL8        DBAA CPU FLOAT
+Q14893#7 DS    XL8        REMOTE PRODUCT ID
+*
+Q14894#1 DS    CL16       REMOTE LOCATION NAME
+Q14894#2 DS    F          #MESSAGES SENT
+Q14894#3 DS    F          #MESSAGES RECEIVED
+Q14894#4 DS    XL8        TOTAL ELAPSED FLOAT
+Q14894#5 DS    XL8        DBAA ELAPSED FLOAT
+Q14894#6 DS    XL8        DBAA CPU FLOAT
+Q14894#7 DS    XL8        REMOTE PRODUCT ID
+*
+* QMDA QWA01R6O  MVS & DDF
+*
+QMDA#1   DS    CL8        PRODUCT ID
+QMDA#2   DS    CL16       DB2 LOCATION
+* QMDAPTYP (QMDA#2(3)) DETERMINES FORMAT OF QMDA#3-#10
+QMDA#3   DS    CL8        SNA NETID
+QMDA#4   DS    CL8        SNA LU
+QMDA#5   DS    CL8        CONNECTION ID
+QMDA#6   DS    CL8        CONNECTION TYPE
+QMDA#7   DS    CL12       CORRELATION ID
+QMDA#8   DS    CL8        AUTHID
+QMDA#9   DS    CL80       MVS ACCOUNTING INFO FROM JOB CARD
+APPSSID  DS    CL4        DB2 SUBSYSTEM ID
+**********************************************************************
+*
+*     PROGRAM NAME - APPSTATS
+*
+*     FUNCTION     - RETRIEVE DB2 ACTIVE THREAD (IFCID 148)
+*                    STATISTICS VIA THE INSTRUMENTATION FACILITY
+*                    INTERFACE
+*
+*     INPUT        - UPON ENTRY R1 POINTS AT THE FOLLOWING PARMS
+*                    P1 - $PARM1   DSECT
+*                         EYEBALL  DC    CL8'THREADS '
+*                         WORKAREA DS    512F
+*
+*     REGISTERS    - R1 --> CALLER PARMLIST
+*                    R3 --> WORKAREA SUPPLIED BY CALLER
+*                    R4 --> IFCA
+*                    R5 =   RETURN CODE FROM IFCA
+*                    R6 --> WQAL
+*                    R7        REGISTERS
+*                    R8              FOR
+*                    R9                 MOVING DATA
+*                    R11--> STATS RETURNED FROM IFI
+*                    R13    BASE REGISTER AND SAVE AREA POINTER
+*
+*     OUTPUT       - WORKAREA WILL BE FILLED IN WITH IFCID 148 STATS
+*
+*     MACROS       - NONE
+*
+*     RETURN CODES - 0 - STATS WERE SUCCESSFULLY RETRIEVED
+*                    4 - THREAD WENT AWAY BEFORE STATS COULD BE GOTTEN
+*                    8 - STATS WEREN'T SUCCESSFULLY RETRIEVED
+*
+*     (1)  GET INPUT PARAMETERS
+*          INITIALIZE DATA AREAS
+*
+*     (2)  RETRIEVE THREAD DETAIL STATISTICS
+*
+*     (3)  IF  IT DIDN'T WORK
+*
+*     (4)      BRANCH AND SET RETURN CODE
+*
+*          ELSE
+*
+*     (5)      SET UP ADDRESSABILITY
+*
+*     (6)      PREPARE AND MOVE TIMESTAMP
+*
+*     (7)      MOVE ACCOUNTING DATA
+*
+*     (8)      MOVE SQL DATA
+*
+*     (9)      MOVE BUFFER POOL DATA
+*
+*     (10)     MOVE IRLM STATS
+*
+*     (11)     MOVE APPLICATION STATS
+*
+*          ENDIF
+*
+*     (12) ADJUST RETURN CODES
+*
+*     (13) EXIT
+*
+*     UPDATED FOR 3.1 4/15/94 STILL MISSING:
+*         QWAC2
+*         QWAC3
+*         QLAC   QWA01R50
+*         QMDA   QWA01R60
+*         QIFA   QWA01R70
+*         QPAC   QWA01R80
+*
+*     UPDATED FOR 4.1 11/10/96 STILL MISSING:
+*         QWAC2
+*         QWAC3
+*         QLAC   QWA01R50  IFCID 3 ONLY
+*         QIFA   QWA01R70
+*         QPAC   QWA01R80
+*                QW0148CP  PACKAGE STUFF
+*
+*
+*
+*
+*
+**********************************************************************
+APPSTATS  CSECT
+          STM   R14,R12,12(R13)
+          BAL   R14,80(R15)
+          DC    18F'-1'
+          ST    R13,4(R14)
+          ST    R14,8(R13)
+          LR    R13,R14
+          USING APPSTATS+8,R13
+*(1)
+          L     R3,0(R1)             GET ADDRESS OF WORKAREA
+          USING $PARM1,R3            SET UP ADDRESSABILITY
+          L     R4,=A(IFCAWORK)      GET ADDRESS OF IFCA WORKAREA
+          USING IFCA,R4              SET UP ADDRESSABILITY
+          L     R6,=A(QUALIFY)       GET ADDRESS OF QUALIFICATION
+          USING WQAL,R6              SET UP ADDRESSABILITY
+          XC    QWAC#1(96),QWAC#1    ZERO
+          XC    QWAC#16(48),QWAC#16  ZERO
+          XC    QWAC#26(68),QWAC#26
+          XC    QXST#1(220),QXST#1       OUT
+          XC    QXST#56(24),QXST#56      OUT
+          XC    QBAC1#1(128),QBAC1#1        RETURN
+          XC    QTXA#1(72),QTXA#1                 AREAS IN
+          XC    Q148#1(48),Q148#1    MAIN ROUTINE
+          XC    Q148#14(24),Q148#14  MAIN ROUTINE
+          XC    Q14881#1(68),Q14881#1
+          XC    Q14882#1(68),Q14882#1
+          XC    Q14883#1(68),Q14883#1
+          XC    Q14884#1(68),Q14884#1
+          XC    QMDA#1(157),QMDA#1
+          XC    Q14891#1(56),Q14891#1
+          XC    Q14892#1(56),Q14892#1
+          XC    Q14893#1(56),Q14893#1
+          XC    Q14894#1(56),Q14894#1
+          L     R1,=F'-1'            INITIALIZE BUFFER POOL #
+          ST    R1,QBAC1#1           TO -1
+          ST    R1,QBAC2#1           TO -1
+          ST    R1,QBAC3#1           TO -1
+          ST    R1,QBAC4#1           TO -1
+          ST    R1,QXST#1            TO -1
+          ST    R1,QTXA#1            TO -1
+*(2)
+          CLC   CORRID,=CL12' '      BLANK CORRELATION ID?
+          CLC   TOKEN,=F'0'          ZERO TOKEN VALUE?
+          BE    EXIT12               IF SO GET OUT
+          MVC   WQALCORR,CORRID      MOVE IN CORRELATION ID
+*         MVC   WQALACE,TOKEN        MOVE IN THREAD TOKEN UPD 4/22/1999
+          OI    PARMEND,X'80'        SET END OF PARMLIST
+          L     R1,=A(PARMLIST)      POINT R1 AT PARMLIST
+          L     R15,=V(DSNWLI)       POINT R15 AT DB2 INTERFACE
+          BALR  R14,R15              GO GET STATS
+*(3)
+          L     R5,IFCARC1           GET RETURN CODE
+          LTR   R5,R5                DID IT WORK?
+*(4)
+          BNZ   NOGOOD               BRANCH AROUND IF IT DIDN'T
+*(5)
+          LA    R11,RETNSPOT         R11--> START OF RECORD
+          LA    R6,RETNSPOT+4        R6--> QWT0
+          USING QWT0,R6              ESTABLISH ADDRESSABILITY
+*(6)
+          L     R7,QWT02PSO          GET OFFSET TO PRODUCT SECTION
+          LA    R8,0(R11,R7)         R8--> PRODUCT SECTION
+          USING QWHS,R8              ESTABLISH ADDRESSABILITY
+          MVC   APPSSID(4),QWHSSSID  MOVE DB2 SUBSYSTEM NAME
+          LM    R0,R1,QWHSSTCK       GET TIMESTAMP
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,TIMESTMP       STORE IN CALLER'S AREA
+*(7)
+          L     R7,QWT02R1O          GET OFFSET TO ACCOUNTING DATA
+          LTR   R7,R7                ANYTHING THERE?
+          BZ    QXSTSPOT             GET OUT IF NOT
+          LA    R8,0(R11,R7)         R8--> QWAC
+          USING QWAC,R8              ESTABLISH ADDRESSABILITY
+          MVC   QWAC#1(148),QWACASC   MOVE CLASS2 TIME FIELDS
+          MVC   QWAC#18(60),QWACBJST MOVE CLASS1 TIME FIELDS
+          MVC   QWAC#26(64),QWACA261 MOVE STUFF
+          LM    R0,R1,QWACBSC        GET BEG STCK
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,QWAC#16        SAVE IT
+          LM    R0,R1,QWACESC        GET BEG STCK
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,QWAC#17        SAVE IT
+*(8)
+QXSTSPOT  L     R7,QWT02R2O          GET OFFSET TO SQL DATA
+          LTR   R7,R7                ANYTHING THERE?
+          BZ    QBACSPOT             TAKE A HIKE IF NOT
+          LA    R8,0(R11,R7)         R8--> QXST
+          USING DSNDQXST,R8          ESTABLISH ADDRESSABILITY
+          MVC   QXST#1(220),QXSELECT MOVE SQL COUNTERS
+          MVC   QXST#56(24),QXSETCRL
+*(9)
+QBACSPOT  L     R7,QWT02R3O          GET OFFSET TO BUFFER ACCOUNT
+          LTR   R7,R7                ANYTHING THERE?
+          BZ    QTXASPOT             GET OUT IF NOT
+          LH    R9,QWT02R3L          GET LENGTH OF ENTRY
+          LH    R10,QWT02R3N         GET NUMBER OF ENTRIES
+          LA    R8,0(R11,R7)         R8--> QBAC
+          USING DSNDQBAC,R8          ESTABLISH ADDRESSABILITY
+          MVC QBAC1#1(64),QBACPID    MOVE DATA
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ARE WE DONE?
+          BZ    QTXASPOT             GET OUT IF SO
+          LA    R8,0(R9,R8)          BUMP TO NEXT ENTRY
+          MVC QBAC2#1(64),QBACPID    MOVE DATA
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ARE WE DONE?
+          BZ    QTXASPOT             GET OUT IF SO
+          LA    R8,0(R9,R8)          BUMP TO NEXT ENTRY
+          MVC QBAC3#1(64),QBACPID    MOVE DATA
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ARE WE DONE?
+          BZ    QTXASPOT             GET OUT IF SO
+          LA    R8,0(R9,R8)          BUMP TO NEXT ENTRY
+          MVC QBAC4#1(64),QBACPID    MOVE DATA
+*(10)
+QTXASPOT  L     R7,QWT02R4O          GET OFFSET TO IRLM STATS
+          LTR   R7,R7                ANYTHING THERE?
+          BZ    QW0148XX             IF NOT TAKE A HIKE
+          LA    R8,0(R11,R7)         R8--> QTXA
+          USING DSNDQTXA,R8          ESTABLISH ADDRESSABILITY
+          MVC   QTXA#1(92),QTXADEA   MOVE DATA
+          UNPK WORKPACK(3),QTXAFLG1(2) CONVERT TO
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   QTXA#7(2),WORKPACK   PRINTABLE HEX
+*(11)
+QW0148XX  L     R7,QWT02R6O          GET OFFSET TO 148
+          LTR   R7,R7                ANYTHING THERE?
+          BZ    QW01488X             GET OUT IF NOT
+          LA    R8,0(R11,R7)         R8--> QW0148
+          USING QW0148,R8            ESTABLISH ADDRESSABILITY
+          MVC   Q148#1(28),QW0148TY  MOVE FIRST CHUNK
+          MVC   Q148#10(4),QW0148IL MOVE LAST CHUNK
+          UNPK WORKPACK(3),QW0148FL(2) CONVERT TO
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q148#6(2),WORKPACK   PRINTABLE HEX
+          UNPK WORKPACK(9),QW0148LH(5)
+          TR   WORKPACK(8),TRANTAB-C'0'
+          MVC   Q148#12(8),WORKPACK
+          UNPK WORKPACK(9),QW0148LA(5) CONVERT TO
+          UNPK WORKPACK+8(9),QW0148LA+4(5) CONVERT TO
+          UNPK WORKPACK+16(9),QW0148LA+8(5) CONVERT TO
+          TR   WORKPACK(24),TRANTAB-C'0'
+          MVC   Q148#13(24),WORKPACK PRINTABLE HEX
+          MVC   Q148#14(24),QW148TTK
+QW01488X  L     R7,QWT02R8O          GET OFFSET TO DIST STUFF
+          LTR   R7,R7                ANYTHING?
+          BZ    QW01489X             SKIP IF NOT
+          LH    R9,QWT02R8L          GET LENGTH OF ENTRY
+          LH    R10,QWT02R8N         GET # OF ENTRIES
+          LA    R8,0(R11,R7)         R8-->QW01488
+          USING QW01488,R8
+          MVC   Q14881#1(28),QW01488L MOVE STUFF
+          UNPK  WORKPACK(3),QW01488A(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14881#4(2),WORKPACK
+          UNPK  WORKPACK(5),QW01488U(2)
+          TR    WORKPACK(4),TRANTAB-C'0'
+          MVC   Q14881#5(4),WORKPACK
+          UNPK  WORKPACK(3),QW0148CT(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14881#6(2),WORKPACK
+          LM    R0,R1,QW01488T       GET STCK LAST MESSAGE
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,Q14881#7       SAVE IT
+          BCTR  R10,R0               DECREMENT COUNTER
+          LTR   R10,R10              ANY LEFT
+          BZ    QW01489X             GET OUT IF NOT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   Q14882#1(28),QW01488L MOVE STUFF
+          UNPK  WORKPACK(3),QW01488A(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14882#4(2),WORKPACK
+          UNPK  WORKPACK(5),QW01488U(2)
+          TR    WORKPACK(4),TRANTAB-C'0'
+          MVC   Q14882#5(4),WORKPACK
+          UNPK  WORKPACK(3),QW0148CT(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14882#6(2),WORKPACK
+          LM    R0,R1,QW01488T       GET STCK LAST MESSAGE
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,Q14882#7       SAVE IT
+          BCTR  R10,R0               DECREMENT COUNTER
+          LTR   R10,R10              ANY LEFT
+          BZ    QW01489X             GET OUT IF NOT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   Q14883#1(28),QW01488L MOVE STUFF
+          UNPK  WORKPACK(3),QW01488A(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14883#4(2),WORKPACK
+          UNPK  WORKPACK(5),QW01488U(2)
+          TR    WORKPACK(4),TRANTAB-C'0'
+          MVC   Q14883#5(4),WORKPACK
+          UNPK  WORKPACK(3),QW0148CT(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14883#6(2),WORKPACK
+          LM    R0,R1,QW01488T       GET STCK LAST MESSAGE
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,Q14883#7       SAVE IT
+          BCTR  R10,R0               DECREMENT COUNTER
+          LTR   R10,R10              ANY LEFT
+          BZ    QW01489X             GET OUT IF NOT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   Q14884#1(28),QW01488L MOVE STUFF
+          UNPK  WORKPACK(3),QW01488A(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14884#4(2),WORKPACK
+          UNPK  WORKPACK(5),QW01488U(2)
+          TR    WORKPACK(4),TRANTAB-C'0'
+          MVC   Q14884#5(4),WORKPACK
+          UNPK  WORKPACK(3),QW0148CT(1)
+          TR    WORKPACK(2),TRANTAB-C'0'
+          MVC   Q14884#6(2),WORKPACK
+          LM    R0,R1,QW01488T       GET STCK LAST MESSAGE
+          SRDL  R0,4                 DIVIDE BY 16
+          STM   R0,R1,Q14884#7       SAVE IT
+QW01489X  L     R7,QWT02R9O          GET OFFSET
+          LTR   R7,R7                ANYTHING THERE
+          BZ    QMDASPOT             GET OUT IF NOT
+          LH    R9,QWT02R9L          GET LENGTH OF ENTRY
+          LH    R10,QWT02R9N         GET # OF ENTRIES
+          LA    R8,0(R11,R7)         R8--> QW01489
+          USING QW01489,R8
+          MVC   Q14891#1(56),QW01489L MOVE STUFF
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ANYMORE?
+          BZ    QMDASPOT             GET OUT IF NOT
+          LA    R8,0(R9,R8)          BUMP TO NEXT ENTRY
+          MVC   Q14892#1(56),QW01489L MOVE STUFF
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ANYMORE?
+          BZ    QMDASPOT             GET OUT IF NOT
+          LA    R8,0(R9,R8)          BUMP TO NEXT ENTRY
+          MVC   Q14893#1(56),QW01489L MOVE STUFF
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ANYMORE?
+          BZ    QMDASPOT             GET OUT IF NOT
+          LA    R8,0(R9,R8)          BUMP TO NEXT ENTRY
+          MVC   Q14894#1(56),QW01489L MOVE STUFF
+QMDASPOT  L     R7,QWT02RAO          GET OFFSET
+          LTR   R7,R7                ANYTHING THERE?
+          BZ    EXIT00               TAKE A HIKE
+          LA    R8,0(R7,R11)
+          USING QMDA,R8
+          MVC   QMDA#1(76),QMDAAINF  MOVE STUFF
+          B     EXIT00               LEAVE
+*(12)
+NOGOOD    C     R5,=F'4'             RC =4?
+          BNE   EXIT08               GET OUT
+          L     R7,IFCARC2           GET REASON CODE
+          C     R7,=X'00E60804'      THREAD GONE?
+          BNE   EXIT08               STAY OUT
+          LA    R15,4                SET RC=4
+          B     EXIT                 NEVER COME BACK
+EXIT08    LA    R15,8                SET RC=8
+          B     EXIT                 FLY AWAY
+EXIT12    LA    R15,12               SET RC=12
+          B     EXIT                 FLY AWAY
+EXIT00    SR    R15,R15              SET RC=0
+EXIT      OPEN  (SNAPDCB,(OUTPUT))   OPEN SNAP FILE
+          LA    R9,$PARM1
+          LR    R10,R9
+          A     R10,=F'16384'
+ SNAP  DCB=SNAPDCB,STORAGE=((R9),(R10)),PDATA=REGS
+          LA    R9,RETNAREA
+          LR    R10,R9
+          A     R10,=F'16384'
+ SNAP  DCB=SNAPDCB,STORAGE=((R9),(R10)),PDATA=REGS
+          LA    R9,IFCIDS
+          LR    R10,R9
+          A     R10,=F'16384'
+ SNAP  DCB=SNAPDCB,STORAGE=((R9),(R10)),PDATA=REGS
+          CLOSE SNAPDCB
+*(13)
+*XIT      L     R13,4(R13)           RESTORE SAVEAREA POINTER
+          L     R13,4(R13)           RESTORE SAVEAREA POINTER
+          L     R14,12(R13)          RESTORE RETURN ADDRESS
+          LM    R0,R12,20(R13)       DON'T RESTORE RETURN CODE
+          BR    R14
+          LTORG
+IFCIDS    DC    X'00060000'
+          DC    X'0094FFFF'
+IFCAWORK  DS    0CL180
+          DC    X'00B40000'
+          DC    C'IFCA'
+          DC    C'MINE'
+          DC    42F'0'
+READS     DC    CL8'READS   '
+PARMLIST  DC    A(READS)
+          DC    A(IFCAWORK)
+          DC    A(RETNAREA)
+          DC    A(IFCIDS)
+PARMEND   DC    A(QUALIFY)
+WORKPACK  DS    CL80
+QUALIFY   DC    X'00C00000'       LENGTH
+          DC    C'WQAL'           EYEBALL
+          DC    F'0'              ACE
+          DC    F'0'              RESERVED
+          DC    XL8'00'           PLAN
+          DC    XL8'00'           AUTHID
+          DC    XL8'00'           OAUTHID
+          DC    XL8'00'           CONNECTION NAME
+          DC    XL12'00'          CORRELATION ID
+          DC    XL32'00'          RESOURCE TOKEN
+          DC    XL4'00'           RESOURCE HASH
+          DC    XL2'00'           ASID
+          DC    XL2'00'           FILLER
+*         DC    XL68'00'          REST OF IT
+          DC    XL94'00'          REST OF IT UPDATED 4/26/1999 FOR V5.1
+          DS    0F                ALIGN ON A FULL WORD
+          DC    CL80'COPYRIGHT 2001 DAVID J YOUNG'
+TRANTAB   DC    C'0123456789ABCDEF'
+SNAPDCB   DCB DSORG=PS,RECFM=VBA,MACRF=(W),BLKSIZE=882,LRECL=125,      X
+               DDNAME=SNAPOUT
+          DC    CL80'THIS IS THE BEGINNING OF RETNAREA ACTIVE THREAD'
+RETNAREA  DC    F'16384'
+RETNSPOT  DS    F                    DSNDWIW HEADER
+          DS    4096F                QWT0
+          END

@@ -1,0 +1,804 @@
+R0       EQU   0
+R1       EQU   1
+R2       EQU   2
+R3       EQU   3
+R4       EQU   4
+R5       EQU   5
+R6       EQU   6
+R7       EQU   7
+R8       EQU   8
+R9       EQU   9
+R10      EQU   10
+R11      EQU   11
+R12      EQU   12
+R13      EQU   13
+R14      EQU   14
+R15      EQU   15
+*
+         DSNDIFCA  DSECT=YES
+*
+*
+         DSNDQWST  DSECT=YES,SUBTYPE=ALL
+*
+$PARM1   DSECT
+         DC    CL8'WORKAREA'
+TIMESTMP DS    XL8                   RECORD MOVEMENT TIMESTAMP
+* QXST AREA - SQL COUNTERS
+QXST#1   DS    F                     SELECTS
+QXST#2   DS    F                     INSERTS
+QXST#3   DS    F                     UPDATES
+QXST#4   DS    F                     DELETES
+QXST#5   DS    F                     DESCRIBES
+QXST#6   DS    F                     PREPARES
+QXST#7   DS    F                     OPENS
+QXST#8   DS    F                     CLOSES
+QXST#9   DS    F                     CREATE TABLE
+QXST#10  DS    F                     CREATE INDEX
+QXST#11  DS    F                     CREATE TABLESPACE
+QXST#12  DS    F                     CREATE SYNONYM
+QXST#13  DS    F                     CREATE DATABASE
+QXST#14  DS    F                     CREATE STOGROUP
+QXST#15  DS    F                     CREATE VIEW
+QXST#16  DS    F                     DROP INDEX
+QXST#17  DS    F                     DROP TABLE
+QXST#18  DS    F                     DROP TABLESPACE
+QXST#19  DS    F                     DROP DATABASE
+QXST#20  DS    F                     DROP SYNONYM
+QXST#21  DS    F                     DROP STOGROUP
+QXST#22  DS    F                     DROP VIEW
+QXST#23  DS    F                     ALTER STOGROUP
+QXST#24  DS    F                     FETCHES
+QXST#25  DS    F                     ALTER TABLESPACE
+QXST#26  DS    F                     ALTER TABLE
+QXST#27  DS    F                     ALTER INDEX
+QXST#28  DS    F                     COMMENT ON
+QXST#29  DS    F                     LOCK TABLE
+QXST#30  DS    F                     GRANT
+QXST#31  DS    F                     REVOKES
+QXST#32  DS    F                     INCREMENTAL BINDS
+QXST#33  DS    F                     LABEL ON
+QXST#34  DS    F                     SET CURRENT SQLID
+QXST#35  DS    F                     CREATE ALIAS
+QXST#36  DS    F                     DROP ALIAS
+QXST#37  DS    F                     RID LIST PROCESSING
+QXST#38  DS    F                     RLP NOT USED INTERNAL LIMIT
+QXST#39  DS    F                     SET HOST VARIABLE
+QXST#40  DS    F                     ALTER DATABASE
+QXST#41  DS    F                     DROP PACKAGE
+QXST#42  DS    F                     DESCRIBE TABLE
+QXST#43  DS    F                     MAXIMUM DEGREE PARALLELISM
+QXST#44  DS    F                     TOTAL NUMBER PAR GROUPS EXECUTED
+QXST#45  DS    F                     PAR-SEQ UPDATE/DELETE
+QXST#46  DS    F                     PAR-SEQ NO SORT
+QXST#47  DS    F                     PAR-SEQ NO STORAGE
+QXST#48  DS    F                     PAR-LPAR NO STORAGE
+QXST#49  DS    F                     PARALLEL SUCCESSFUL
+QXST#50  DS    F                     CONNECT TYPE 1
+QXST#51  DS    F                     CONNECT TYPE 2
+QXST#52  DS    F                     RELEASE
+QXST#53  DS    F                     SET CONNECTION
+QXST#54  DS    F                     SET CURRENT DEGREE
+* QTST DATA - SERVICE CONTROLLER
+QTST#1   DS    F                     ALLOCATION ATTEMPTS
+QTST#2   DS    F                     SUCCESSFUL ALLOCATIONS
+QTST#3   DS    F                     AUTOMATIC BINDS
+QTST#4   DS    F                     SUCCESSFUL AOTOMATIC BINDS
+QTST#5   DS    F                     INVALID RESOURCE IDS
+QTST#6   DS    F                     BIND ADD SUBCOMMANDS
+QTST#7   DS    F                     BIND REPLACE SUBCOMMANDS
+QTST#8   DS    F                     TEST BINDS
+QTST#9   DS    F                     PLANS BOUND
+QTST#10  DS    F                     REBIND SUBCOMMANDS
+QTST#11  DS    F                     REBIND ATTEMPTS
+QTST#12  DS    F                     PLANS REBOUND
+QTST#13  DS    F                     FREE SUBCOMMAND
+QTST#14  DS    F                     FREE ATTEMPTS
+QTST#15  DS    F                     PLANS FREED
+QTST#16  DS    F                     AUTHORIZATION CHECKS
+QTST#17  DS    F                     SUCCESSFUL AUTHORIZATION CHECKS
+QTST#18  DS    F                     OPEN DATA SETS
+QTST#19  DS    F                     MAXIMUM OPEN DATA SETS
+QTST#20  DS    F                     SUCC AUTHS USING CATALOG
+QTST#21  DS    F                     SUCC AUTHS PUBLIC
+QTST#22  DS    F                     MAX NOT IN USE DATASETS
+QTST#23  DS    CL12                  RESERVED
+QTST#24  DS    F                     NOT IN USE BECAME IN USE
+QTST#25  DS    CL12                  RESERVED
+QTST#26  DS    F                     NOT IN USE CLOSED
+QTST#27  DS    F                     R/W --> R/O
+QTST#28  DS    F                     NOT IN USE NOT CLOSED
+QTST#29  DS    F                     BIND ADD PACKAGE
+QTST#30  DS    F                     BIND REPLACE PACKAGE
+QTST#31  DS    F                     PACKAGES BOUND
+QTST#32  DS    F                     REBIND PACKAGE
+QTST#33  DS    F                     REBIND PACKAGE ATTEMPTS
+QTST#34  DS    F                     PACKAGES REBOUND
+QTST#35  DS    F                     FREE PACKAGE
+QTST#36  DS    F                     FREE PACKAGE ATTEMPTS
+QTST#37  DS    F                     PACKAGES FREED
+QTST#38  DS    F                     AUTOBIND PACKAGE ATTEMPTS
+QTST#39  DS    F                     AUTOBIND PACKAGE
+QTST#40  DS    F                     PACKAGE ALLOCATE ATTEMPTS
+QTST#41  DS    F                     PACKAGES ALLOCATED
+* QBST - BUFFER POOL STATISTICS
+QBST1#1  DS    F                     BUFFER POOL ID
+QBST1#2  DS    F                     GET PAGES
+QBST1#3  DS    F                     SYNCHRONOUS READS
+QBST1#4  DS    F                     VERTICAL DEFERRED WRITE THRESH
+QBST1#5  DS    F                     GET PAGE FAILURE FULL VPOOL
+QBST1#6  DS    F                     EXPANSION FAILURE - GETMAIN
+QBST1#7  DS    F                     BUFFER UPDATES
+QBST1#8  DS    F                     SETW ISSUED - UW PAGES
+QBST1#9  DS    F                     PAGES WRITTEN
+QBST1#10 DS    F                     PAGES WRITTEN - UW PAGES
+QBST1#11 DS    F                     ASYNCHRONOUS WRITES
+QBST1#12 DS    F                     CURRENT ACTIVE BUFFERS
+QBST1#13 DS    F                     PAGE IN REQUIRED - READ IO
+QBST1#14 DS    F                     PAGE IN REQUIRED - WRITE IO
+QBST1#15 DS    F                     SUCCESSFUL DATA SET OPENS
+QBST1#16 DS    F                     SYNCHRONOUS WRITE IOS
+QBST1#17 DS    F                     SEQ PREFETCH REQUESTS
+QBST1#18 DS    F                     PAGES READ DUE TO SEQ PREFETCH
+QBST1#19 DS    F                     PREFETCH DISABLED - NO BUFFER
+QBST1#20 DS    F                     PREFETCH DISABLED - NO READ ENGINE
+QBST1#21 DS    F                     WRITE ENGINE UNAVAILABLE
+QBST1#22 DS    F                     DEFERRED WRITE THRESHOLD
+QBST1#23 DS    F                     DATA MANAGER CRITICAL THRESHOLD
+QBST1#24 DS    F                     MIGRATED DATA SETS ENCOUNTERED
+QBST1#25 DS    F                     RECALL MIGRATED DS TIMEOUTS
+QBST1#26 DS    F                     PREFETCH ASYNCHRONOUS READS
+QBST1#27 DS    F                     PREFETCH ABORT - WORK
+QBST1#28 DS    F                     PREFETCH DISABLED - BUFF SHORT
+QBST1#29 DS    F                     MAX SORT WORK FILES
+QBST1#30 DS    F                     # PAGES DESTRUCTIVE READ
+QBST1#31 DS    F                     # PAGES DQD FOR DESTRUCTIVE READ
+QBST1#32 DS    F                     QUERY SORT WORK FILES
+QBST1#33 DS    F                     SUM OF SORT WORK FILES REQUESTS
+QBST1#34 DS    F                     " DENIED
+QBST1#35 DS    F                     SORT WORK BUFFER SHORTAGE
+QBST1#36 DS    F                     LIST PREFETCH    REQSAME PAGESET
+QBST1#37 DS    F                     DYNAMIC PREFETCH
+QBST1#38 DS    F                     SUCC VPOOL SIZE CHANGE
+QBST1#39 DS    F                     SUCC HPOOL SIZE CHANGE
+QBST1#40 DS    F                     PAGES HP-VP MVPG SYNC
+QBST1#41 DS    F                     " ASYNC
+QBST1#42 DS    F                     UNSUCCESSFUL HP-VP MVPG READS
+QBST1#43 DS    F                     PAGES VP-HP SYNC MVPG OR CWRITE
+QBST1#44 DS    F                            "   ASYNC
+QBST1#45 DS    F                     UNSUCC VP-HP MVPG OR CWRITE
+QBST1#46 DS    F                     VPOOL BUFFERS
+QBST1#47 DS    F                     HPOOL BUFFERS
+QBST1#48 DS    F                     PAGES READ DYNAMIC PREFETCH
+QBST1#49 DS    F                            "   LIST
+QBST1#50 DS    F                     DYNAMIC ASYNC PF READS
+QBST1#51 DS    F                     LIST PF ASYNC READS
+QBST1#52 DS    F                     GET PAGE SEQUENTIAL
+QBST1#53 DS    F                     SYNC READ I/O SEQUENTIAL
+QBST1#54 DS    F                     R
+QBST1#55 DS    F                     R
+QBST1#56 DS    F                     R
+QBST1#57 DS    F                     UNSUCC GET PAGE CONDITIONAL
+QBST1#58 DS    F                     HIGHEST PREFETCH I/O STREAMS
+QBST1#59 DS    F                     PF I/O DENIED BPOOL
+QBST1#60 DS    F                     NEGOTATIONS BM AND RDS PAR I/O
+QBST1#61 DS    F                     I/O PAR DOWNGRADES BPOOL
+QBST1#62 DS    F                     PF 1/2
+QBST1#63 DS    F                     PF 1/4
+QBST1#64 DS    F                     PAGES READ HP-VP ASYNC ADMF
+QBST1#65 DS    F                     UNSUCC READS HP-VP ADMF
+QBST1#66 DS    F                     PAGES WRITTEN VP-HP ASYNC ADMF
+QBST1#67 DS    F                     UNSUCC VP-HP WRITES ADMF
+QBST1#68 DS    F                     # HP BUFFERS BACKED BY ES
+QBST2#1  DS    F                     BUFFER POOL ID
+QBST2#2  DS    F                     GET PAGES
+QBST2#3  DS    F                     SYNCHRONOUS READS
+QBST2#4  DS    F                     VERTICAL DEFERRED WRITE THRESH
+QBST2#5  DS    F                     GET PAGE FAILURE FULL VPOOL
+QBST2#6  DS    F                     EXPANSION FAILURE - GETMAIN
+QBST2#7  DS    F                     BUFFER UPDATES
+QBST2#8  DS    F                     SETW ISSUED - UW PAGES
+QBST2#9  DS    F                     PAGES WRITTEN
+QBST2#10 DS    F                     PAGES WRITTEN - UW PAGES
+QBST2#11 DS    F                     ASYNCHRONOUS WRITES
+QBST2#12 DS    F                     CURRENT ACTIVE BUFFERS
+QBST2#13 DS    F                     PAGE IN REQUIRED - READ IO
+QBST2#14 DS    F                     PAGE IN REQUIRED - WRITE IO
+QBST2#15 DS    F                     SUCCESSFUL DATA SET OPENS
+QBST2#16 DS    F                     SYNCHRONOUS WRITE IOS
+QBST2#17 DS    F                     SEQ PREFETCH REQUESTS
+QBST2#18 DS    F                     PAGES READ DUE TO SEQ PREFETCH
+QBST2#19 DS    F                     PREFETCH DISABLED - NO BUFFER
+QBST2#20 DS    F                     PREFETCH DISABLED - NO READ ENGINE
+QBST2#21 DS    F                     WRITE ENGINE UNAVAILABLE
+QBST2#22 DS    F                     DEFERRED WRITE THRESHOLD
+QBST2#23 DS    F                     DATA MANAGER CRITICAL THRESHOLD
+QBST2#24 DS    F                     MIGRATED DATA SETS ENCOUNTERED
+QBST2#25 DS    F                     RECALL MIGRATED DS TIMEOUTS
+QBST2#26 DS    F                     PREFETCH ASYNCHRONOUS READS
+QBST2#27 DS    F                     PREFETCH ABORT - WORK
+QBST2#28 DS    F                     PREFETCH DISABLED - BUFF SHORT
+QBST2#29 DS    F                     MAX SORT WORK FILES
+QBST2#30 DS    F                     # PAGES DESTRUCTIVE READ
+QBST2#31 DS    F                     # PAGES DQD FOR DESTRUCTIVE READ
+QBST2#32 DS    F                     QUERY SORT WORK FILES
+QBST2#33 DS    F                     SUM OF SORT WORK FILES REQUESTS
+QBST2#34 DS    F                     " DENIED
+QBST2#35 DS    F                     SORT WORK BUFFER SHORTAGE
+QBST2#36 DS    F                     LIST PREFETCH    REQSAME PAGESET
+QBST2#37 DS    F                     DYNAMIC PREFETCH
+QBST2#38 DS    F                     SUCC VPOOL SIZE CHANGE
+QBST2#39 DS    F                     SUCC HPOOL SIZE CHANGE
+QBST2#40 DS    F                     PAGES HP-VP MVPG SYNC
+QBST2#41 DS    F                     " ASYNC
+QBST2#42 DS    F                     UNSUCCESSFUL HP-VP MVPG READS
+QBST2#43 DS    F                     PAGES VP-HP SYNC MVPG OR CWRITE
+QBST2#44 DS    F                            "   ASYNC
+QBST2#45 DS    F                     UNSUCC VP-HP MVPG OR CWRITE
+QBST2#46 DS    F                     VPOOL BUFFERS
+QBST2#47 DS    F                     HPOOL BUFFERS
+QBST2#48 DS    F                     PAGES READ DYNAMIC PREFETCH
+QBST2#49 DS    F                            "   LIST
+QBST2#50 DS    F                     DYNAMIC ASYNC PF READS
+QBST2#51 DS    F                     LIST PF ASYNC READS
+QBST2#52 DS    F                     GET PAGE SEQUENTIAL
+QBST2#53 DS    F                     SYNC READ I/O SEQUENTIAL
+QBST2#54 DS    F                     R
+QBST2#55 DS    F                     R
+QBST2#56 DS    F                     R
+QBST2#57 DS    F                     UNSUCC GET PAGE CONDITIONAL
+QBST2#58 DS    F                     HIGHEST PREFETCH I/O STREAMS
+QBST2#59 DS    F                     PF I/O DENIED BPOOL
+QBST2#60 DS    F                     NEGOTATIONS BM AND RDS PAR I/O
+QBST2#61 DS    F                     I/O PAR DOWNGRADES BPOOL
+QBST2#62 DS    F                     PF 1/2
+QBST2#63 DS    F                     PF 1/4
+QBST2#64 DS    F                     PAGES READ HP-VP ASYNC ADMF
+QBST2#65 DS    F                     UNSUCC READS HP-VP ADMF
+QBST2#66 DS    F                     PAGES WRITTEN VP-HP ASYNC ADMF
+QBST2#67 DS    F                     UNSUCC VP-HP WRITES ADMF
+QBST2#68 DS    F                     # HP BUFFERS BACKED BY ES
+QBST3#1  DS    F                     BUFFER POOL ID
+QBST3#2  DS    F                     GET PAGES
+QBST3#3  DS    F                     SYNCHRONOUS READS
+QBST3#4  DS    F                     VERTICAL DEFERRED WRITE THRESH
+QBST3#5  DS    F                     GET PAGE FAILURE FULL VPOOL
+QBST3#6  DS    F                     EXPANSION FAILURE - GETMAIN
+QBST3#7  DS    F                     BUFFER UPDATES
+QBST3#8  DS    F                     SETW ISSUED - UW PAGES
+QBST3#9  DS    F                     PAGES WRITTEN
+QBST3#10 DS    F                     PAGES WRITTEN - UW PAGES
+QBST3#11 DS    F                     ASYNCHRONOUS WRITES
+QBST3#12 DS    F                     CURRENT ACTIVE BUFFERS
+QBST3#13 DS    F                     PAGE IN REQUIRED - READ IO
+QBST3#14 DS    F                     PAGE IN REQUIRED - WRITE IO
+QBST3#15 DS    F                     SUCCESSFUL DATA SET OPENS
+QBST3#16 DS    F                     SYNCHRONOUS WRITE IOS
+QBST3#17 DS    F                     SEQ PREFETCH REQUESTS
+QBST3#18 DS    F                     PAGES READ DUE TO SEQ PREFETCH
+QBST3#19 DS    F                     PREFETCH DISABLED - NO BUFFER
+QBST3#20 DS    F                     PREFETCH DISABLED - NO READ ENGINE
+QBST3#21 DS    F                     WRITE ENGINE UNAVAILABLE
+QBST3#22 DS    F                     DEFERRED WRITE THRESHOLD
+QBST3#23 DS    F                     DATA MANAGER CRITICAL THRESHOLD
+QBST3#24 DS    F                     MIGRATED DATA SETS ENCOUNTERED
+QBST3#25 DS    F                     RECALL MIGRATED DS TIMEOUTS
+QBST3#26 DS    F                     PREFETCH ASYNCHRONOUS READS
+QBST3#27 DS    F                     PREFETCH ABORT - WORK
+QBST3#28 DS    F                     PREFETCH DISABLED - BUFF SHORT
+QBST3#29 DS    F                     MAX SORT WORK FILES
+QBST3#30 DS    F                     # PAGES DESTRUCTIVE READ
+QBST3#31 DS    F                     # PAGES DQD FOR DESTRUCTIVE READ
+QBST3#32 DS    F                     QUERY SORT WORK FILES
+QBST3#33 DS    F                     SUM OF SORT WORK FILES REQUESTS
+QBST3#34 DS    F                     " DENIED
+QBST3#35 DS    F                     SORT WORK BUFFER SHORTAGE
+QBST3#36 DS    F                     LIST PREFETCH    REQSAME PAGESET
+QBST3#37 DS    F                     DYNAMIC PREFETCH
+QBST3#38 DS    F                     SUCC VPOOL SIZE CHANGE
+QBST3#39 DS    F                     SUCC HPOOL SIZE CHANGE
+QBST3#40 DS    F                     PAGES HP-VP MVPG SYNC
+QBST3#41 DS    F                     " ASYNC
+QBST3#42 DS    F                     UNSUCCESSFUL HP-VP MVPG READS
+QBST3#43 DS    F                     PAGES VP-HP SYNC MVPG OR CWRITE
+QBST3#44 DS    F                            "   ASYNC
+QBST3#45 DS    F                     UNSUCC VP-HP MVPG OR CWRITE
+QBST3#46 DS    F                     VPOOL BUFFERS
+QBST3#47 DS    F                     HPOOL BUFFERS
+QBST3#48 DS    F                     PAGES READ DYNAMIC PREFETCH
+QBST3#49 DS    F                            "   LIST
+QBST3#50 DS    F                     DYNAMIC ASYNC PF READS
+QBST3#51 DS    F                     LIST PF ASYNC READS
+QBST3#52 DS    F                     GET PAGE SEQUENTIAL
+QBST3#53 DS    F                     SYNC READ I/O SEQUENTIAL
+QBST3#54 DS    F                     R
+QBST3#55 DS    F                     R
+QBST3#56 DS    F                     R
+QBST3#57 DS    F                     UNSUCC GET PAGE CONDITIONAL
+QBST3#58 DS    F                     HIGHEST PREFETCH I/O STREAMS
+QBST3#59 DS    F                     PF I/O DENIED BPOOL
+QBST3#60 DS    F                     NEGOTATIONS BM AND RDS PAR I/O
+QBST3#61 DS    F                     I/O PAR DOWNGRADES BPOOL
+QBST3#62 DS    F                     PF 1/2
+QBST3#63 DS    F                     PF 1/4
+QBST3#64 DS    F                     PAGES READ HP-VP ASYNC ADMF
+QBST3#65 DS    F                     UNSUCC READS HP-VP ADMF
+QBST3#66 DS    F                     PAGES WRITTEN VP-HP ASYNC ADMF
+QBST3#67 DS    F                     UNSUCC VP-HP WRITES ADMF
+QBST3#68 DS    F                     # HP BUFFERS BACKED BY ES
+QBST4#1  DS    F                     BUFFER POOL ID
+QBST4#2  DS    F                     GET PAGES
+QBST4#3  DS    F                     SYNCHRONOUS READS
+QBST4#4  DS    F                     VERTICAL DEFERRED WRITE THRESH
+QBST4#5  DS    F                     GET PAGE FAILURE FULL VPOOL
+QBST4#6  DS    F                     EXPANSION FAILURE - GETMAIN
+QBST4#7  DS    F                     BUFFER UPDATES
+QBST4#8  DS    F                     SETW ISSUED - UW PAGES
+QBST4#9  DS    F                     PAGES WRITTEN
+QBST4#10 DS    F                     PAGES WRITTEN - UW PAGES
+QBST4#11 DS    F                     ASYNCHRONOUS WRITES
+QBST4#12 DS    F                     CURRENT ACTIVE BUFFERS
+QBST4#13 DS    F                     PAGE IN REQUIRED - READ IO
+QBST4#14 DS    F                     PAGE IN REQUIRED - WRITE IO
+QBST4#15 DS    F                     SUCCESSFUL DATA SET OPENS
+QBST4#16 DS    F                     SYNCHRONOUS WRITE IOS
+QBST4#17 DS    F                     SEQ PREFETCH REQUESTS
+QBST4#18 DS    F                     PAGES READ DUE TO SEQ PREFETCH
+QBST4#19 DS    F                     PREFETCH DISABLED - NO BUFFER
+QBST4#20 DS    F                     PREFETCH DISABLED - NO READ ENGINE
+QBST4#21 DS    F                     WRITE ENGINE UNAVAILABLE
+QBST4#22 DS    F                     DEFERRED WRITE THRESHOLD
+QBST4#23 DS    F                     DATA MANAGER CRITICAL THRESHOLD
+QBST4#24 DS    F                     MIGRATED DATA SETS ENCOUNTERED
+QBST4#25 DS    F                     RECALL MIGRATED DS TIMEOUTS
+QBST4#26 DS    F                     PREFETCH ASYNCHRONOUS READS
+QBST4#27 DS    F                     PREFETCH ABORT - WORK
+QBST4#28 DS    F                     PREFETCH DISABLED - BUFF SHORT
+QBST4#29 DS    F                     MAX SORT WORK FILES
+QBST4#30 DS    F                     # PAGES DESTRUCTIVE READ
+QBST4#31 DS    F                     # PAGES DQD FOR DESTRUCTIVE READ
+QBST4#32 DS    F                     QUERY SORT WORK FILES
+QBST4#33 DS    F                     SUM OF SORT WORK FILES REQUESTS
+QBST4#34 DS    F                     " DENIED
+QBST4#35 DS    F                     SORT WORK BUFFER SHORTAGE
+QBST4#36 DS    F                     LIST PREFETCH    REQSAME PAGESET
+QBST4#37 DS    F                     DYNAMIC PREFETCH
+QBST4#38 DS    F                     SUCC VPOOL SIZE CHANGE
+QBST4#39 DS    F                     SUCC HPOOL SIZE CHANGE
+QBST4#40 DS    F                     PAGES HP-VP MVPG SYNC
+QBST4#41 DS    F                     " ASYNC
+QBST4#42 DS    F                     UNSUCCESSFUL HP-VP MVPG READS
+QBST4#43 DS    F                     PAGES VP-HP SYNC MVPG OR CWRITE
+QBST4#44 DS    F                            "   ASYNC
+QBST4#45 DS    F                     UNSUCC VP-HP MVPG OR CWRITE
+QBST4#46 DS    F                     VPOOL BUFFERS
+QBST4#47 DS    F                     HPOOL BUFFERS
+QBST4#48 DS    F                     PAGES READ DYNAMIC PREFETCH
+QBST4#49 DS    F                            "   LIST
+QBST4#50 DS    F                     DYNAMIC ASYNC PF READS
+QBST4#51 DS    F                     LIST PF ASYNC READS
+QBST4#52 DS    F                     GET PAGE SEQUENTIAL
+QBST4#53 DS    F                     SYNC READ I/O SEQUENTIAL
+QBST4#54 DS    F                     R
+QBST4#55 DS    F                     R
+QBST4#56 DS    F                     R
+QBST4#57 DS    F                     UNSUCC GET PAGE CONDITIONAL
+QBST4#58 DS    F                     HIGHEST PREFETCH I/O STREAMS
+QBST4#59 DS    F                     PF I/O DENIED BPOOL
+QBST4#60 DS    F                     NEGOTATIONS BM AND RDS PAR I/O
+QBST4#61 DS    F                     I/O PAR DOWNGRADES BPOOL
+QBST4#62 DS    F                     PF 1/2
+QBST4#63 DS    F                     PF 1/4
+QBST4#64 DS    F                     PAGES READ HP-VP ASYNC ADMF
+QBST4#65 DS    F                     UNSUCC READS HP-VP ADMF
+QBST4#66 DS    F                     PAGES WRITTEN VP-HP ASYNC ADMF
+QBST4#67 DS    F                     UNSUCC VP-HP WRITES ADMF
+QBST4#68 DS    F                     # HP BUFFERS BACKED BY ES
+* QTXA DATA - IRLM LOCKING
+QTXA#1   DS    F                     DEADLOCKS
+QTXA#2   DS    F                     SUSPEND COUNT - LOCK CONFLICT
+QTXA#3   DS    F                     TIMEOUT COUNTS
+QTXA#4   DS    F                     LOCK ESACL SHARED
+QTXA#5   DS    F                     LOCK ESCAL EXCLUSIVE
+QTXA#6   DS    F                     MAX PAGE LOCKS
+QTXA#7   DS    XL1                   FLAG BYTE
+QTXA#8   DS    XL1                   FILLER
+QTXA#9   DS    XL2                   RLIM TABLE ID
+QTXA#10  DS    F                     HOW LIMIT WAS DETERMINED
+QTXA#11  DS    F                     LIMIT IN SU'S - ASUTIME
+QTXA#12  DS    F                     LIMIT IN CPU 16 MICROSECONDS
+QTXA#13  DS    F                     HIGHEST CPU 16 MICROSECONDS
+QTXA#14  DS    F                     SUSPEND COUNT - LATCH CONFLICT
+QTXA#15  DS    F                     SUSPEND COUNT - OTHER CONFLICT
+QTXA#16  DS    F                     LOCK REQUESTS
+QTXA#17  DS    F                     UNLOCK REQUESTS
+QTXA#18  DS    F                     QUERY REQUESTS
+QTXA#19  DS    F                     CHANGE REQUESTS
+QTXA#20  DS    F                     OTHER IRLM REQUESTS
+QTXA#21  DS    F                     CLAIM REQUESTS
+QTXA#22  DS    F                     NG CLAIM REQUESTS
+QTXA#23  DS    F                     DRAIN REQUESTS
+QTXA#24  DS    F                     NG DRAIN REQUESTS
+* QISE DATA - EDM POOL STATS
+QISE#1   DS    F                     FAILURES DUE TO POOL FULL
+QISE#2   DS    F                     # PAGES IN POOL
+QISE#3   DS    F                     # REQUESTS FOR CT SECTIONS
+QISE#4   DS    F                     # LOAD CT SECTIONS FROM DASD
+QISE#5   DS    F                     # PAGES USED FOR CT
+QISE#6   DS    F                     # FREE PAGES
+QISE#7   DS    F                     # PAGES USED FOR DBD
+QISE#8   DS    F                     # PAGES USED FOR SKCT
+QISE#9   DS    F                     # REQUESTS FOR DBD
+QISE#10  DS    F                     # LOAD DBD FROM DASD
+QISE#11  DS    F                     # PT SECTION REQUESTS
+QISE#12  DS    F                     # LOAD PT FROM DASD
+QISE#13  DS    F                     # PT PAGES
+QISE#14  DS    F                     # SKPT PAGES
+* QIST DATA SCC COUNTERS RID STUFF
+QIST#1   DS    F                     # RLP NG RDS
+QIST#2   DS    F                     # RLP NG DM
+QIST#3   DS    F                     # RID BLOCK MAX
+QIST#4   DS    F                     # RID BLOCK CURRENT
+QIST#5   DS    F                     # RLP NG LS
+QIST#6   DS    F                     # RPS MAX EXC
+QIST#7   DS    F                     # COLUMNS BYPASSED
+*
+* QBGL GROUP BUFFER POOL STATS QWS10R70
+*
+QBGL1#1  DS    F       ID
+         DS    F       FILLER
+QBGL1#2  DS    F       # SES READS XI DATA
+QBGL1#3  DS    F       #SES READS XI NO DATA DIR ENTRY NOT SUPPRESSED
+QBGL1#4  DS    F       #SES READS XI NO DATA DIR ENTRY SUPPRESSED
+QBGL1#5  DS    F       #SES READS NOT IN BPOOL
+QBGL1#6  DS    F       #SES READS NOT IN BPOOL NO DATA
+QBGL1#7  DS    F       #SES READS USER TASK NOT IN BPOOL NO DATA
+QBGL1#8  DS    F       #SES WRITES CHANGED PAGES USER
+QBGL1#9  DS    F       #SES WRITES CLEAN PAGES USER
+QBGL1#10 DS    F       #CASTOUT CLASS THRESHOLD REACHED
+QBGL1#11 DS    F       #CASTOUT GBPOOL THRESHOLDS REACHED
+QBGL1#12 DS    F       #PREFETCH SES READS DATA
+QBGL1#13 DS    F       #PREFETCH SES READS NO DATA DIR ENTRY NOT SUPP
+QBGL1#14 DS    F       #PREF SES READS NODATA DIR ENTRY SUPP
+QBGL1#15 DS    F       #SES WRITES DB2 EU CHANGED PAGES
+QBGL1#16 DS    F       #PAGES CASTOUT GBPOOL - DASD
+QBGL1#17 DS    F       #TIMES CASTOUT ENGINE NOT AVAILABLE
+QBGL1#18 DS    F       #SES WRITE ENGINE NOT AVAILABLE
+QBGL1#19 DS    F       #SES READS NO GOOD STORAGE
+QBGL1#20 DS    F       #SES WRITES NO GOOD STORAGE
+QBGL1#21 DS    F       #OTHER SES REQUESTS
+QBGL1#22 DS    F       #SES WRITES DB2 EU CLEAN PAGES
+QBGL2#1  DS    F       ID
+         DS    F       FILLER
+QBGL2#2  DS    F       # SES READS XI DATA
+QBGL2#3  DS    F       #SES READS XI NO DATA DIR ENTRY NOT SUPPRESSED
+QBGL2#4  DS    F       #SES READS XI NO DATA DIR ENTRY SUPPRESSED
+QBGL2#5  DS    F       #SES READS NOT IN BPOOL
+QBGL2#6  DS    F       #SES READS NOT IN BPOOL NO DATA
+QBGL2#7  DS    F       #SES READS USER TASK NOT IN BPOOL NO DATA
+QBGL2#8  DS    F       #SES WRITES CHANGED PAGES USER
+QBGL2#9  DS    F       #SES WRITES CLEAN PAGES USER
+QBGL2#10 DS    F       #CASTOUT CLASS THRESHOLD REACHED
+QBGL2#11 DS    F       #CASTOUT GBPOOL THRESHOLDS REACHED
+QBGL2#12 DS    F       #PREFETCH SES READS DATA
+QBGL2#13 DS    F       #PREFETCH SES READS NO DATA DIR ENTRY NOT SUPP
+QBGL2#14 DS    F       #PREF SES READS NODATA DIR ENTRY SUPP
+QBGL2#15 DS    F       #SES WRITES DB2 EU CHANGED PAGES
+QBGL2#16 DS    F       #PAGES CASTOUT GBPOOL - DASD
+QBGL2#17 DS    F       #TIMES CASTOUT ENGINE NOT AVAILABLE
+QBGL2#18 DS    F       #SES WRITE ENGINE NOT AVAILABLE
+QBGL2#19 DS    F       #SES READS NO GOOD STORAGE
+QBGL2#20 DS    F       #SES WRITES NO GOOD STORAGE
+QBGL2#21 DS    F       #OTHER SES REQUESTS
+QBGL2#22 DS    F       #SES WRITES DB2 EU CLEAN PAGES
+QBGL3#1  DS    F       ID
+         DS    F       FILLER
+QBGL3#2  DS    F       # SES READS XI DATA
+QBGL3#3  DS    F       #SES READS XI NO DATA DIR ENTRY NOT SUPPRESSED
+QBGL3#4  DS    F       #SES READS XI NO DATA DIR ENTRY SUPPRESSED
+QBGL3#5  DS    F       #SES READS NOT IN BPOOL
+QBGL3#6  DS    F       #SES READS NOT IN BPOOL NO DATA
+QBGL3#7  DS    F       #SES READS USER TASK NOT IN BPOOL NO DATA
+QBGL3#8  DS    F       #SES WRITES CHANGED PAGES USER
+QBGL3#9  DS    F       #SES WRITES CLEAN PAGES USER
+QBGL3#10 DS    F       #CASTOUT CLASS THRESHOLD REACHED
+QBGL3#11 DS    F       #CASTOUT GBPOOL THRESHOLDS REACHED
+QBGL3#12 DS    F       #PREFETCH SES READS DATA
+QBGL3#13 DS    F       #PREFETCH SES READS NO DATA DIR ENTRY NOT SUPP
+QBGL3#14 DS    F       #PREF SES READS NODATA DIR ENTRY SUPP
+QBGL3#15 DS    F       #SES WRITES DB2 EU CHANGED PAGES
+QBGL3#16 DS    F       #PAGES CASTOUT GBPOOL - DASD
+QBGL3#17 DS    F       #TIMES CASTOUT ENGINE NOT AVAILABLE
+QBGL3#18 DS    F       #SES WRITE ENGINE NOT AVAILABLE
+QBGL3#19 DS    F       #SES READS NO GOOD STORAGE
+QBGL3#20 DS    F       #SES WRITES NO GOOD STORAGE
+QBGL3#21 DS    F       #OTHER SES REQUESTS
+QBGL3#22 DS    F       #SES WRITES DB2 EU CLEAN PAGES
+QBGL4#1  DS    F       ID
+         DS    F       FILLER
+QBGL4#2  DS    F       # SES READS XI DATA
+QBGL4#3  DS    F       #SES READS XI NO DATA DIR ENTRY NOT SUPPRESSED
+QBGL4#4  DS    F       #SES READS XI NO DATA DIR ENTRY SUPPRESSED
+QBGL4#5  DS    F       #SES READS NOT IN BPOOL
+QBGL4#6  DS    F       #SES READS NOT IN BPOOL NO DATA
+QBGL4#7  DS    F       #SES READS USER TASK NOT IN BPOOL NO DATA
+QBGL4#8  DS    F       #SES WRITES CHANGED PAGES USER
+QBGL4#9  DS    F       #SES WRITES CLEAN PAGES USER
+QBGL4#10 DS    F       #CASTOUT CLASS THRESHOLD REACHED
+QBGL4#11 DS    F       #CASTOUT GBPOOL THRESHOLDS REACHED
+QBGL4#12 DS    F       #PREFETCH SES READS DATA
+QBGL4#13 DS    F       #PREFETCH SES READS NO DATA DIR ENTRY NOT SUPP
+QBGL4#14 DS    F       #PREF SES READS NODATA DIR ENTRY SUPP
+QBGL4#15 DS    F       #SES WRITES DB2 EU CHANGED PAGES
+QBGL4#16 DS    F       #PAGES CASTOUT GBPOOL - DASD
+QBGL4#17 DS    F       #TIMES CASTOUT ENGINE NOT AVAILABLE
+QBGL4#18 DS    F       #SES WRITE ENGINE NOT AVAILABLE
+QBGL4#19 DS    F       #SES READS NO GOOD STORAGE
+QBGL4#20 DS    F       #SES WRITES NO GOOD STORAGE
+QBGL4#21 DS    F       #OTHER SES REQUESTS
+QBGL4#22 DS    F       #SES WRITES DB2 EU CLEAN PAGES
+*
+* QTGS GLOBAL LOCKING STATISTICS QWS10R8O
+*
+QTGS#1   DS    F       #PLOCK REQUESTS
+QTGS#2   DS    F       #PLOCK CHANGE REQUESTS
+QTGS#3   DS    F       #PLOCK UNLOCK REQUESTS
+QTGS#4   DS    F       #SYNCH LR--> XES
+QTGS#5   DS    F       #SYNCH CHANGE LR -->  XES
+QTGS#6   DS    F       #SYNCH UNLOCK LR--> XES
+QTGS#7   DS    F       #GLOBAL SUSPENDS IRLM CONTENTION
+QTGS#8   DS    F       #GLOBAL SUSPENDS XES CONTENTIONS
+QTGS#9   DS    F       #FALSE CONTENTIONS
+QTGS#10  DS    F       #GLOBAL LOCK/CHANGE DENIED
+QTGS#11  DS    F       #SENT NOTIFY MESSAGES
+QTGS#12  DS    F       #RECEIVED NOTIFY MESSAGES
+QTGS#13  DS    F       #LOCKS IRLM-XES ASYNCH
+QTGS#14  DS    F       #PAGESET/PARTN PLOCK NEGOTIATION
+QTGS#15  DS    F       #PAGE LOCK NEGOTIATIONS
+QTGS#16  DS    F       #OTHER PLOCK NEGOTIATIONS
+QTGS#17  DS    F       #CHANGEP REQUESTS
+QTGS#18  DS    F       MAX# ENGINES PLOCK, NOTIFY EXITS
+QTGS#19  DS    F       #TIMES NO PLOCK/NOTIFY ENGINE AVAILABLE
+*
+DBSSID   DS    CL4     DB2 SUBSYSTEM ID
+**********************************************************************
+*
+*     PROGRAM NAME - DBSTATS
+*
+*     FUNCTION     - RETRIEVE DB2 DATA BASE SERVICES ADDRESS SPACE
+*                    STATISTICS VIA THE INSTRUMENTATION FACILITY
+*                    INTERFACE
+*
+*     INPUT        - UPON ENTRY R1 POINTS AT THE FOLLOWING PARMS
+*                    P1 - $PARM1   DSECT
+*                         EYEBALL  DC    CL8'WORKAREA'
+*                         WORKAREA DS    512F
+*
+*     REGISTERS    - R1 --> CALLER PARMLIST
+*                    R3 --> WORKAREA SUPPLIED BY CALLER
+*                    R4 --> IFCA
+*                    R5 =   RETURN CODE FROM IFCA
+*                    R6     WORK
+*                    R7        REGISTERS
+*                    R8              FOR
+*                    R9                 MOVING DATA
+*                    R11 --> RETURNED DB STATS
+*                    R13    BASE REGISTER AND SAVE AREA POINTER
+*
+*     OUTPUT       - WORKAREA WILL BE FILLED IN WITH DSNDBM1 STATS
+*
+*     MACROS       - NONE
+*
+*     RETURN CODES - 0 - STATS WERE SUCCESSFULLY RETRIEVED
+*                    4 - STATS WEREN'T SUCCESSFULLY RETRIEVED
+*
+*     (1)  GET INPUT PARAMETERS
+*          SET UP IFCA
+*
+*     (2)  CALL DSNWLI FOR DB STATS
+*
+*     (3)  IF  CALL IS UNSUCCESSFUL
+*
+*     (4)      BRANCH TO NOGOOD AND SET RC=4
+*
+*          ELSE
+*
+*     (5)      ADJUST AND MOVE TIMESTAMP
+*
+*     (6)      MOVE SQL COUNTERS
+*
+*     (7)      MOVE SERVICE CONTROLLER DATA
+*
+*     (8)      MOVE BUFFER POOL INFO
+*
+*     (9)      MOVE IRLM LOCKING STATS
+*
+*     (10)     MOVE EDM POOL STATS
+*
+*     (11)     SET RC=0
+*
+*          ENDIF
+*
+*     (12) EXIT
+*
+**********************************************************************
+DBSTATS   CSECT
+          STM   R14,R12,12(R13)
+          BAL   R14,80(R15)
+          DC    18F'-1'
+          ST    R13,4(R14)
+          ST    R14,8(R13)
+          LR    R13,R14
+          USING DBSTATS+8,R13
+*(1)
+          L     R3,0(R1)             GET ADDRESS OF WORKAREA
+          USING $PARM1,R3            SET UP ADDRESSABILITY
+          XC    QXST#1(216),QXST#1
+          XC    QTST#1(164),QTST#1
+          XC    QBST1#1(240),QBST1#1
+          XC    QBST1#60(36),QBST1#60
+          XC    QBST2#1(240),QBST2#1
+          XC    QBST2#60(36),QBST2#60
+          XC    QBST3#1(240),QBST3#1
+          XC    QBST3#60(36),QBST3#60
+          XC    QBST4#1(240),QBST4#1
+          XC    QBST4#60(36),QBST4#60
+          XC    QTXA#1(96),QTXA#1
+          XC    QISE#1(56),QISE#1
+          XC    QIST#1(28),QIST#1
+          XC    QBGL1#1(88),QBGL1#1
+          XC    QBGL2#1(88),QBGL2#1
+          XC    QBGL3#1(88),QBGL3#1
+          XC    QBGL4#1(88),QBGL4#1
+          XC    QTGS#1(76),QTGS#1
+          L     R4,=F'-1'
+          ST    R4,QTGS#1
+          ST    R4,QBST1#1
+          ST    R4,QBST2#1
+          ST    R4,QBST3#1
+          ST    R4,QBST4#1
+          ST    R4,QBGL1#1
+          ST    R4,QBGL2#1
+          ST    R4,QBGL3#1
+          ST    R4,QBGL4#1
+          L     R4,=A(IFCAWORK)      GET ADDRESS OF IFCA WORKAREA
+          USING IFCA,R4              SET UP ADDRESSABILITY
+*(2)
+          OI    PARMEND,X'80'        SET END OF PARMLIST
+          L     R1,=A(PARMLIST)      POINT R1 AT PARMLIST
+          L     R15,=V(DSNWLI)       POINT R15 AT DB2 INTERFACE
+          BALR  R14,R15              GO GET STATS
+*(3)
+          L     R5,IFCARC1           GET RETURN CODE
+          LTR   R5,R5                DID IT WORK?
+*(4)
+          BNZ   NOGOOD               BRANCH AROUND IF IT DIDN'T
+*(5)
+          LA    R11,RETNSPOT         R11--> START OF RECORD
+          LA    R6,RETNSPOT+4        R6--> QWS1
+          USING QWS1,R6              ESTABLISH ADDRESSABILITY
+          L     R7,QWS10PSO          GET OFFSET TO PRODUCT SECTION
+          LA    R8,0(R11,R7)         R8--> PRODUCT SECTION
+          USING QWHS,R8              ESTABLISH ADDRESSABILITY
+          MVC DBSSID(4),QWHSSSID     MOVE DB2 SUBSYSTEM ID
+          LM    R0,R1,QWHSSTCK       GET TIMESTAMP
+          SRDL  R0,4                 DIVIDE BY 16 TO AVOID 0C9
+          STM   R0,R1,TIMESTMP       MOVE TO CALLER'S AREA
+*(6)
+          L     R7,QWS10R1O          GET OFFSET TO QXST
+          LTR   R7,R7                ANY SQL ?
+          BZ    QTSTSPOT             BRANCH AROUND IF NOT
+          LA    R8,0(R11,R7)         R8--> QXST
+          USING DSNDQXST,R8          ESTABLISH ADDRESSABILITY
+          MVC   QXST#1(216),QXSELECT MOVE COUNTERS
+*(7)
+QTSTSPOT  L     R7,QWS10R2O          GET OFFSET TO QTST
+          LA    R8,0(R11,R7)         R8--> QTST
+          USING DSNDQTST,R8          ESTABLISH ADDRESSABILITY
+          MVC   QTST#1(180),QTALLOCA MOVE COUNTERS
+*(8)
+          L     R7,QWS10R3O          GET OFFSET TO QBST
+          LH    R9,QWS10R3L          GET LENGTH OF EACH ENTRY
+          LH    R10,QWS10R3N         GET NUMBER OF ENTRIES
+          LA    R8,0(R11,R7)         R8--> QBST BUFFER POOL 0
+          USING DSNDQBST,R8          ESTABLISH ADDRESSABILITY
+          MVC   QBST1#1(112),QBSTPID MOVE DATA
+          MVC   QBST1#29(160),QBSTWFM MOVE DATA
+          BCTR  R10,R0               SUBTRACT ONE
+          LTR   R10,R10              ARE WE DONE?
+          BZ    QTXASPOT             MAKE LIKE A BANNANA AND SPLIT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   QBST2#1(112),QBSTPID MOVE DATA
+          MVC   QBST2#29(160),QBSTWFM MOVE DATA
+          BCTR  R10,R0               SUBTRACT ONE
+          LTR   R10,R10              ARE WE DONE?
+          BZ    QTXASPOT             MAKE LIKE A BANNANA AND SPLIT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   QBST3#1(112),QBSTPID MOVE DATA
+          MVC   QBST3#29(160),QBSTWFM MOVE DATA
+          BCTR  R10,R0               SUBTRACT ONE
+          LTR   R10,R10              ARE WE DONE?
+          BZ    QTXASPOT             MAKE LIKE A BANNANA AND SPLIT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   QBST4#1(112),QBSTPID MOVE DATA
+          MVC   QBST4#29(160),QBSTWFM MOVE DATA
+*(9)
+QTXASPOT  L     R7,QWS10R5O          GET OFFSET TO QTXA
+          LA    R8,0(R11,R7)         R8--> QTXA
+          USING DSNDQTXA,R8          ESTABLISH ADDRESSABILITY
+          MVC   QTXA#1(88),QTXADEA   MOVE DATA
+*(9A)
+          L     R7,QWS10R4O          QIST
+          LA    R8,0(R11,R7)         R8--> QIST
+          USING DSNDQIST,R8
+          MVC   QIST#1(28),QISTRLLM
+*(10)
+          L     R7,QWS10R6O          GET OFFSET TO QISE
+          LA    R8,0(R11,R7)         R8--> QISE
+          USING QISE,R8              ESTABLISH ADDRESSABILITY
+          MVC   QISE#1(56),QISEFAIL  MOVE DATA
+QBGLSPOT  L     R7,QWS10R7O          GET OFFSET
+          LTR   R7,R7                ANYTHING TO LOOK AT?
+          BZ    QTGSSPOT             GET OUT IF NOT
+          LH    R9,QWS10R7L          GET LENGTH
+          LH    R10,QWS10R7N         GET NUMBER
+          LA    R8,0(R11,R7)         R8--> QBGL
+          USING QBGL,R8
+          MVC   QBGL1#1(92),QBGLGN   MOVE IT
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ANY MORE?
+          BZ QTGSSPOT                IF SO EXIT STAGE LEFT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   QBGL2#1(92),QBGLGN   MOVE IT
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ANY MORE?
+          BZ QTGSSPOT                IF SO EXIT STAGE LEFT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   QBGL3#1(92),QBGLGN   MOVE IT
+          BCTR  R10,R0               DECREMENT
+          LTR   R10,R10              ANY MORE?
+          BZ QTGSSPOT                IF SO EXIT STAGE LEFT
+          LA    R8,0(R8,R9)          BUMP TO NEXT ENTRY
+          MVC   QBGL4#1(92),QBGLGN   MOVE IT
+QTGSSPOT  L     R7,QWS10R8O          GET OFFSET
+          LTR   R7,R7                ANYTHING?
+          BZ    EXIT00               LEAVE IF NOT
+          LA    R8,0(R11,R7)         R8--> QTGS
+          USING QTGS,R8
+          MVC   QTGS#1(76),QTGSLPLK
+*(11)
+*         OPEN  (SNAPDCB,(OUTPUT))   OPEN SNAP FILE
+*         LA    R9,RETNAREA
+*         LA    R10,2052(R9)
+*SNAP  DCB=SNAPDCB,STORAGE=((R9),(R10)),PDATA=REGS
+*         CLOSE SNAPDCB
+EXIT00    SR    R15,R15              SET RC=0
+          B     EXIT                 WE'RE OUTTA HERE
+*
+NOGOOD    LA    R15,4                SET RC=4
+*
+*(12)
+EXIT      L     R13,4(R13)           RESTORE SAVEAREA POINTER
+          L     R14,12(R13)          RESTORE RETURN ADDRESS
+          LM    R0,R12,20(R13)       DON'T RESTORE RETURN CODE
+          BR    R14
+          LTORG
+IFCIDS    DC    X'00060000'
+          DC    X'0002'
+IFCAWORK  DS    0CL180
+          DC    X'00B40000'
+          DC    C'IFCA'
+          DC    C'MINE'
+          DC    42F'0'
+READS     DC    CL8'READS   '
+PARMLIST  DC    A(READS)
+          DC    A(IFCAWORK)
+          DC    A(RETNAREA)
+PARMEND   DC    A(IFCIDS)
+SNAPDCB   DCB DSORG=PS,RECFM=VBA,MACRF=(W),BLKSIZE=882,LRECL=125,      X
+               DDNAME=SNAPOUT
+          DC    CL80'THIS IS THE BEGINNING OF RETNAREA DB STATS'
+          DC    CL80'COPYRIGHT 2001 DAVID J YOUNG'
+RETNAREA  DC    F'16384'
+RETNSPOT  DS    F                    DSNDWIW HEADER
+          DS    4096F                QWS1
+          END

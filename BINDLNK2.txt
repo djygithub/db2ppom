@@ -1,0 +1,35 @@
+//BINDLNK2 JOB (330RWM00,),'D J YOUNG',MSGCLASS=Y,REGION=4096K,
+//       NOTIFY=DJY00,USER=DJY00
+//*OBPARM S=SIL1
+//JOBLIB DD DSN=DSN610.SDSNLOAD,DISP=SHR
+//BIND    EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(4,LT)                     
+//SYSTSPRT DD  SYSOUT=*                                                 
+//SYSPRINT DD  SYSOUT=*                                                 
+//SYSUDUMP DD  SYSOUT=*                                                 
+//SYSTSIN  DD  *                                                        
+  DSN SYSTEM(DB2L)                                                      
+  BIND PLAN(DB2MON) MEM(SYSSTATS DBSTATS APPSTATS DISTHRED)  -          
+             ACT(REP) ISOLATION(CS)  -                                  
+       LIB('DSN51L.DBRMLIB.DATA')                                       
+//LINKEDIT EXEC PGM=IEWL,
+//             PARM='XREF,LIST,SIZE=(400000,150000)',
+//             TIME=(,10),REGION=4096K
+//*YSLIB   DD  DSN=DSN510.DBWG.SRCLIB.DATA,DISP=SHR
+//SYSLIB   DD  DSN=DSN51L.SRCLIB.DATA,DISP=SHR
+//         DD  DSN=IGY.SIGYCOMP,DISP=SHR
+//         DD  DSN=DSN610.SDSNLOAD,DISP=SHR
+//         DD  DSN=CEE.SCEELKED,DISP=SHR
+//SYSUT1   DD  UNIT=3390,
+//             SPACE=(CYL,(1,1))
+//SYSPRINT DD  SYSOUT=*
+//SYSLMOD  DD  DSN=DSN51L.RUNLIB.LOAD,DISP=SHR
+//*YSLMOD  DD  DSN=DSN510.DBWG.DB2MON.LOAD,DISP=SHR
+//SYSLIN   DD  DDNAME=SYSIN
+//SYSIN    DD  *
+  INCLUDE SYSLIB(DB2MON)
+  INCLUDE SYSLIB(SYSSTATS)
+  INCLUDE SYSLIB(DBSTATS)
+  INCLUDE SYSLIB(APPSTATS)
+  INCLUDE SYSLIB(TIMECONS)
+  INCLUDE SYSLIB(DSNELI)
+  NAME    DB2MON(R)

@@ -1,0 +1,205 @@
+R0       EQU   0
+R1       EQU   1
+R2       EQU   2
+R3       EQU   3
+R4       EQU   4
+R5       EQU   5
+R6       EQU   6
+R7       EQU   7
+R8       EQU   8
+R9       EQU   9
+R10      EQU   10
+R11      EQU   11
+R12      EQU   12
+R13      EQU   13
+R14      EQU   14
+R15      EQU   15
+*
+         DSNDIFCA  DSECT=YES
+*
+*
+*
+$PARM1   DSECT
+         DC    CL8'WORKTHRD'
+$NUMTHRD DS    F                  STORE NUMBER OF THREADS HERE
+*SPOT    DS    CL56               MESSAGE TEXT
+$SPOT    DS    CL61               MESSAGE TEXT UPDATED 4/22/1999
+*HRDLNTH EQU   56                 LENGTH OF MESSAGE TEXT
+THRDLNTH EQU   61                 LENGTH OF MESUPDATED 4/22/1999
+$V401I   DSECT
+$V401IL  DS    H                  LENGTH OF SEGMENT
+         DS    H                  RESERVED
+$V401IMS DS    CL8                DSNV401I
+         DS    CL36               MESSAGE TEXT
+$V402I   DSECT
+$V402IL  DS    H                  LENGTH OF SEGMENT
+         DS    H                  RESERVED
+$V402IMS DS    CL8                DSNV402I
+         DS    CL20               MESSAGE TEXT
+$V404I   DSECT
+$V404IL  DS    H                  LENGTH OF SEGMENT
+         DS    H                  RESERVED
+*V404IMS DS    CL56               MESSAGE TEXT
+$V404IMS DS    CL61               MESSAGE TEXT UPDATED 4/22/1999
+*
+**********************************************************************
+*
+*     PROGRAM NAME - DISTHRED
+*
+*     FUNCTION     - RETRIEVE ACTIVE THREAD INFO BY ISSUING -DIS
+*                    THREAD VIA THE INSTRUMENTATION FACILITY
+*                    INTERFACE
+*
+*     INPUT        - UPON ENTRY R1 POINTS AT THE FOLLOWING PARMS
+*                    P1 - $PARM1   DSECT
+*                         EYEBALL  DC    CL8'WORKAREA'
+*                         WORKAREA DS    ROOM FOR 256 THREADS
+*
+*     REGISTERS    - R1 --> CALLER PARMLIST
+*                    R3 --> WORKAREA SUPPLIED BY CALLER
+*                    R4 --> IFCA
+*                    R5 =   RETURN CODE FROM IFCA
+*                    R6     WORK
+*                    R7        REGISTERS
+*                    R8              FOR
+*                    R9                 MOVING DATA
+*                    R13    BASE REGISTER AND SAVE AREA POINTER
+*
+*     OUTPUT       - WORKAREA WILL BE FILLED IN WITH ACTIVE THREADS
+*
+*     MACROS       - UNCONDITIONAL GETMAIN R
+*
+*     RETURN CODES - 0 - ACTIVE THREAD INFO WAS RETRIEVED
+*                    4 - NO ACTIVE THREADS (PROBABLY IMPOSSIBLE)
+*                    8 - IFI CALL DIDN'T WORK
+*
+*     (1)  GET INPUT PARAMETERS
+*
+*     (2)  GRAB A CHUNK OF STORAGE
+*
+*     (3)  ATTEMPT -DIS THREAD(*)
+*
+*     (4)  IF  IT DIDN'T WORK
+*
+*     (5)      BRANCH AND SET RETURN CODE
+*
+*          ENDIF
+*
+*     (6)  BUMP PAST HEADER MESSAGES
+*
+*     (7)  GET READY TO MOVE THREAD DATA
+*
+*     (8)  DO WHILE THERE ARE MORE THREADS TO PROCESS
+*
+*             MOVE THREAD DATA BACK TO DB2MON
+*
+*          UNDDO
+*
+*     (9)  SAVE NUMBER OF THREADS
+*
+*     (10) ADJUST RETURN CODES
+*
+*     (11) EXIT
+*
+**********************************************************************
+DISTHRED  CSECT
+          STM   R14,R12,12(R13)
+          BAL   R14,80(R15)
+          DC    18F'-1'
+          ST    R13,4(R14)
+          ST    R14,8(R13)
+          LR    R13,R14
+          USING DISTHRED+8,R13
+*(1)
+          L     R3,0(R1)             GET ADDRESS OF WORKAREA
+          USING $PARM1,R3            SET UP ADDRESSABILITY
+          L     R4,=A(IFCAWORK)      GET ADDRESS OF IFCA WORKAREA
+          USING IFCA,R4              SET UP ADDRESSABILITY
+*(2)
+          GETMAIN R,LV=15600         GRAB A CHUNK OF STORAGE
+          ST    R0,0(R1)             STORE LENGTH IN FIRST FULLWORD
+          ST    R1,RETNSPOT          STORE ADDRESS IN PARMLIST
+*(3)
+          OI    PARMEND,X'80'        SET END OF PARMLIST
+          L     R1,=A(PARMLIST)      POINT R1 AT PARMLIST
+          L     R15,=V(DSNWLI)       POINT R15 AT DB2 INTERFACE
+          BALR  R14,R15              GO GET STATS
+*(4)
+          L     R5,IFCARC1           GET RETURN CODE
+          LTR   R5,R5                DID IT WORK?
+*(5)
+          BNZ   NOGOOD               BRANCH AROUND IF IT DIDN'T
+*(6)
+          L     R6,RETNSPOT          POINT AT BEGINNING OF RETRNAREA
+          LA    R6,4(R6)             BUMP PAST RETRNAREA LENGTH
+          USING $V401I,R6            ESTABLISH ADDRESSABILITY
+          CLC   $V401IMS,=C'DSNV401I' SO FAR SO GOOD?
+          BNE   NOTHREDS             GET OUT IF NOT
+          LH    R7,$V401IL           GET SEGMENT LENGTH
+          LA    R7,0(R6,R7)          BUMP TO NEXT SEGMENT
+          USING $V402I,R7            ESTABLISH ADDRESSABILITY
+          CLC   $V402IMS,=C'DSNV402I' STILL OK?
+          BNE   NOTHREDS             IF NOT, TAKE A HIKE
+*(7)
+          LH    R6,$V402IL           GET LENGTH OF SEGMENT
+          LA    R6,0(R7,R6)          BUMP PAST DSNV402I
+          USING $V404I,R6            ESTABLISH ADDRESSABILITY
+          LH    R7,$V404IL           GET LENGTH OF TITLES
+          LA    R6,0(R6,R7)          BUMP PAST TITLES
+          LA    R8,$SPOT             R8--> SPOT TO RETURN THREAD INFO
+          SR    R9,R9                INITIALIZE # THREADS TO ZERO
+*(8)
+**********************************************************************
+* OLD CODE UPDATED 4/22/1999
+**********************************************************************
+*OOP      MVC   0(THRDLNTH,R8),$V404IMS MOVE THREAD INFO
+*         LA    R9,1(R9)             ADD 1 TO THREAD COUNTER
+*         LH    R10,$V404IL          GET SEGMENT LENGTH
+*         LA    R6,0(R6,R10)         BUMP TO NEXT SEGMENT
+*         LA    R8,THRDLNTH(R8)      BUMP TO NEXT THREAD
+*         CLC   $V404IMS(30),=C'DISPLAY ACTIVE REPORT COMPLETE'
+*         BNE   LOOP                 GO GET SOME MORE
+**********************************************************************
+LOOP      CLI   $V404IMS,C' '        NORMAL THREAD ?
+          BNE   MOVEIT               MOVE IT
+          CLC   $V404IMS(8),=CL8'        '  PARALLEL THREAD ?
+          BE    MOVEIT               MOVE IT
+          B     DONTMOVE             DON'T MOVE IT
+MOVEIT    MVC   0(THRDLNTH,R8),$V404IMS  MOVE THREAD DATA
+          LA    R9,1(R9)             INCREMENT THREAD COUNTER
+          LA    R8,THRDLNTH(R8)      BUMP THREAD TABLE POINTER
+DONTMOVE  LH    R10,$V404IL          GET MESSAGE SEGMENT LENGTH
+          LA    R6,0(R6,R10)         BUMP MESSAGE SEGMENT POINTER
+          CLC   $V404IMS(30),=C'DISPLAY ACTIVE REPORT COMPLETE'
+          BNE   LOOP                 GO GET SOME MORE
+*(9)
+          ST    R9,$NUMTHRD          STORE NUMBER OF THREADS
+          SR    R15,R15              SET RC = 0
+          B     EXIT                 GO FAR FAR AWAY
+*(10)
+NOTHREDS  LA    R15,4                NO ACTIVE THREADS RC=4
+          B EXIT                     MAKE LIKE A TREE AND LEAF
+NOGOOD    LA    R15,8                CALL DIDN'T WORK RC=8
+*(11)
+EXIT      L     R13,4(R13)           RESTORE SAVEAREA POINTER
+          L     R14,12(R13)          RESTORE RETURN ADDRESS
+          LM    R0,R12,20(R13)       DON'T RESTORE RETURN CODE
+          BR    R14
+          LTORG
+          DC    CL80'THIS IS THE BEGINNING OF RETNAREA DIS THREAD(*)'
+          DC    CL80'COPYRIGHT 2001 DAVID J YOUNG'
+IFCIDS    DC    X'00060000'
+          DC    X'0093'
+IFCAWORK  DS    0CL180
+          DC    X'00B40000'
+          DC    C'IFCA'
+          DC    C'MINE'
+          DC    42F'0'
+COMMAND   DC    CL8'COMMAND '
+PARMLIST  DC    A(COMMAND)
+          DC    A(IFCAWORK)
+RETNSPOT  DS    A
+PARMEND   DC    A(COMMTEXT)
+COMMTEXT  DC    XL4'00120000'
+          DC    CL16'-DIS THREAD(*)'
+          END
